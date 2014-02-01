@@ -1,0 +1,37 @@
+Concentration on programming and problem solving, within the context of applications.
+
+Basic Topics for part 1: 
+  Data Types - stack, queue, bags, union-find
+  Sorting - quicksort, mergesort, heapsort, radix sorts
+  Searching - BST (binary search trees), red-black BST, hash table
+
+Second part will cover:
+  Graphs
+  Strings - regex, data compression
+  Advanced
+
+Algorithms formalized by Church and Turing at Princeton in the 1930s
+
+Reason to study algorithms: 
+  - Algorithms have far reaching applications
+  - Solve problems that could not be otherwise addressed
+  - Intellectual stimulation
+  - To become a proficient programmer
+    "Bad programmers worry about the code. Good programmers worry about data structures and their relationships." - Linus Torvalds
+  - Computational models are replacing mathematical models in scientific inquiry
+
+Booksite at: 'http://www.algs4.princeton.edu'
+  - Free online material to see lecture slides, sample code, and a general summary of content
+
+Prereqs:
+  Programming: loops, arrays, functions, objects, recursion
+  Java: used as an expository language
+  Math: high-school algebra
+
+Question: Which is not covered in part 1?
+  1. quicksort
+  2. priority queues
+  3. binary search trees
+* 4. Dijkstra's algorithm  
+
+

@@ -1,0 +1,80 @@
+Union find algorithms to solve dynamic connectivity algorithms
+
+Steps to developing a usable algorithm:
+  - Model the problem
+  - Find an algorithm to solve it
+      In some cases this is good enough and we can stop
+  - Fast enough? Fits in memory?
+  - If not, figure out why
+  - Find a way to address the problem
+  - Iterate until satisfied
+
+  This is the scientific approach to computing. Find models, and update based on experimentation
+
+Dynamic connectivity
+
+  Given a set of N objects
+    Union command: connect two objects
+    Find/connected query: is there a path connection the two objects?
+
+    0 1-2 3-4
+          | |
+    5-6 7 8 9
+
+    Graph above created with a series of commands: union(4,3), union(3,8) ...
+    We can then query: connected(0,7) which fails (while connected(8,9) would pass)
+
+  Problem: be able to efficiently support these two commands (union and connected)
+    Easy to see need for efficient algorithms when we have thousands of nodes and connections
+
+  Applications of these algorithms:
+    Photos - pixels
+    Computers - networks
+    Social networks - friends
+    Computer chips - transistors
+
+  When programming, name objects 0 - (N-1)
+    Use integers as index into arrays
+
+  Assume "is connected to" is an equivalence relation:
+    Reflexive - p is connected to p
+    Symmetric - if p is connected to q, then q is connected to p
+    Transitive - if p is connected to q and q is connected to r, then p is connected to r
+
+  Connected components: maximal set of objects that are mutually connected.
+
+  0 1 2-3     {0} {1 4 5} {2 3 6 7}
+   /  |/|
+  4-5 6 7
+    
+    Find query: check if two objects are in the same component.
+    Union: replace components containing two objects with their union.
+
+  0 1 2-3  union(2,5)  0 1 2-3
+   /  |/|      =>       / /|/|
+  4-5 6 7              4-5 6 7
+
+{0}{145}{2367}        {0}{1234567}
+
+  Goal: design efficient data structure for union-find
+    - Number of objects N can be huge
+    - Number of operations M can be huge
+    - Find queries and union commands may be intermixed
+
+  Will have two operations:
+    void union - connect two nodes
+    bool connected - check if nodes are connected
+
+  General API:
+    Read from STDIN an int for the number of nodes
+    Then read in pairs of integers representing connected nodes
+      Check if they are connected, and connect them if they aren't
+
+  How many connected components result after performing the following sequence of union operations
+  on a set of 10 items?
+  1-2, 3-4, 5-6, 7-8, 7-9, 2-8, 0-5, 1-9
+
+  1
+  2
+* 3
+  4
