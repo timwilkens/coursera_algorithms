@@ -1,0 +1,69 @@
+Quick-find (eager approach)
+
+Data structure: 
+  Integer array id[] of size N
+  Interpretation: p and q are connected iff they have the same id
+
+  id[]  0 1 2 3 4 5 6 7 8 9     {056}{127}{3489}
+        0 1 1 8 8 0 0 1 8 8
+
+        0 1-2 3-4 
+        |   | | |
+        5-6 7 8 9
+
+  Find: check if p and q have the same id
+
+  Union: merge components containing p and q, change all entries whose
+    id equals id[p] to id[q]
+    - Problem: many values may have to change each time
+
+  Start with all ids equal to the index
+    0 1 2 3 4 5 6 7 8 9
+
+    union(4,3)   -  turn the first into the second
+    0 1 2 3 3 5 6 7 8 9
+
+    union(3,8)
+    0 1 2 8 8 5 6 7 8 9
+
+    union(6,5)
+    0 1 2 8 8 5 5 7 8 9
+
+    union(9,4)
+    0 1 2 8 8 5 5 7 8 8
+
+  Create integer array where each element is identical to its index
+  my @id;
+  for (1 .. $n) {
+    $id[$_] = $_;
+  }  
+
+  Find just checks if id[p] == id[q]
+  return ($id[p] == $id[q]);
+
+  Union needs to change everything with the value of our first argument to be the value of our second.
+    my $pid = $id[p];
+    my $qid = $id[q];
+    for (0 .. $#id) {
+      if ($id[$_] == $pid) {
+        $id[$_] = $qid;
+      }
+    }
+
+  Cost model: number of array accesses (for read and write)
+    Initialize - N 
+    Union - N
+    Find - 1
+
+  Defect in quick-find: union is very expensive
+    N unions on N objects => quadratic time (N^2)
+    quadratic time is unacceptable - the time doesn't scale appropriately
+    quadractic algos do NOT scale with technology
+
+  What is the maximum number of id[] array entries that can change (from one value to a
+  different value) during one call to union when using the quick-find data structure on N elements?
+
+  1. 1
+  2. lgN
+* 3. N - 1 (If everything but our selector element is connected)
+  4. N
