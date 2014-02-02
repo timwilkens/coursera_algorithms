@@ -1,0 +1,57 @@
+Union Find Applications
+
+  Image processing
+  Dynamic connectivity for networking
+  Games (Go, Hex)
+  
+Percolation - a model for many physical systems (abstract)
+
+  N by N grid
+  Each site is open with probability p (or blocked with probability 1 - p)
+  System percolates iff top and bottom are connected by open sites
+
+  Electricity
+  Fluid Flow
+  Social Interaction
+
+  Likelihood of percolation depends on site vacancy probability p
+
+  Percolation phase transition
+    When N is large, theory guarantees a sharp threshold p*
+      - p > p* almost certainly percolates
+      - p < p* almost certainly does not percolate
+
+  Question - what is the value of p*?
+    Only solution so far is through lots of computation, which are enabled by fast union find algorithms
+
+  Monte Carlo simulation
+    Initialize N by N grid to be blocked
+    Declare random sites open (1 by 1) until the top is connected to the borrom
+    Vacancy percentage estimates p*
+
+    Run this experiment millions of times until we end up with a good estimation of p*
+
+  Create an object for each site:  0  1  2  3  4 
+                                   5  6  7  8  9
+                                  10 11 12 13 14
+                                  15 16 17 18 19
+                                  20 21 22 23 24
+
+  Create connections (unions) if the nodes are conneceted
+
+  Bad solution: Percolates iff any site on bottom row is connected to site on top row
+   This is a quadratic solution so is too slow for us
+
+  Solution: create virtual site on top and bottom (top is connected to 0 1 2 3 4) and then test once if those sites are connected
+
+  To open a site we connected it to each adjacent open site
+
+  For large square lattices, p* is 0.592746
+    - Our fast algo enables an accurate answer to this scientific question
+
+  When opening one new site in the percolation simulation, how many times is union() called?
+
+* 1. 0,1,2,3,or 4 (depends on the number of adjacent open sites)
+  2. 1,2,3,or 4
+  3. 2,3,4
+  4. 4

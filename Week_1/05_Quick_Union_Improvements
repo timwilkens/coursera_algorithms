@@ -1,0 +1,98 @@
+Making immprovements to quick union
+
+  Weighted quick-union
+    Modify quick union to avoid tall trees
+    Keep track of the size of each tree (number of objects)
+    Balance by linking root of smaller tree to root of larger free
+
+    0 1 2 3 4 5 6 7 8 9
+
+    union(4,3)
+    0 1 2 4 4 5 6 7 8 9
+
+    union(3,8)
+    0 1 2 4 4 5 6 7 4 9
+      Instead of placing the two-object tree 4-3 underneath our 8 root, we place the smaller
+      single object 8 tree underneath our 4 root
+ 
+    union(9,4)
+    0 1 2 4 4 5 6 7 4 4
+
+    Continue in this way. We try to ensure that we end up with a relatively flat tree, without
+    the downside of having to modifiy many elements every time we perform a union operation.
+      -Always merge a smaller tree into the root of a larger tree.
+
+    The weighted union cuts down dramatically on the average distance to the root
+
+    Data structure - same as quick union.
+      - We must also have an extract size array that counts the number of objects in the tree rooted at a given position
+   
+    Find is identical to unweighted quick union
+      return (root($p) == root($q));
+
+    Modify quick union to:
+      - Link root of smaller tree to root of larger tree.
+      - Update the size array
+
+   $root_p = root($p);
+   $root_q = root($q);
+   return if ($p == $q);
+   if ($size[$root_p] < $size[$root_q]) {
+     $id[$root_p] = $root_q;
+     $size[$root_q] += $size[$root_p];
+   } else {
+     $id[$root_q] = $root_p;
+     $size[$root_p] += $size[$root_q];
+   }
+
+  Running Time:
+    Find: takes time proportional to depth of p and q
+    Union: takes constant time given roots
+
+  Proposition: Depth of any node x is at most lg(N)
+
+  Proof:
+
+    When does depth of x increase?
+    Increases by 1 when tree T1 containing x is merged into another tree T2
+      - The size of the tree containing x at least doubles since |T2| >= |T1|
+      - Size of tree containing x can double at most lg(N) times.
+
+  Weighted QU
+    Initialization - N
+    Union - lg(N)
+    Find - lg(N)
+
+    This algorithm now scales very easily
+
+  Another easy fix - path compression
+    Just after computing the root of p, set the id of each examined node to point to that root
+
+    Easy to implement: make every other node in the path point to the grandparent
+
+    while ($i != $id[$i]) {
+      $id[$i] = $id[$id[$i]];
+      $i = $id[$i];
+    }
+    return $i;
+
+    This doesn't totally flatten, but it comes very close.
+
+    Weight quick-union with path compression is close to linear (in practice is linear)
+      - Proof exists that there is no way to have a linear algorithm to accomplish this goal
+
+    Run time example: 10^9 unions and finds on 10^9 objects
+      - Simple implementation takes ~30 years
+      - Weight quick union with path compression takes 6 seconds
+
+      - Super computer would not help the bad algorithm. Good algo enables the solution.
+
+    Suppose that the id[] array during the weighted quick union algorithm is 
+      0 0 0 0 0 0 7 8 8 8
+ 
+    Which id[] entry changes when we apply the union operation to 3 and 6?
+
+    1. id[0]
+    2. id[3]
+    3. id[6]
+ *  4. id[8]
