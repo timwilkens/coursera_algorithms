@@ -96,9 +96,9 @@ sub display_open {
 
   for my $node (1 .. ($grid_size * $grid_size)) {
     if ($self->is_open($node)) {
-      print " O";
+      print " #";
     } else {
-      print " X";
+      print " .";
     }
     print "\n" if ($node % $grid_size == 0);
   }

@@ -34,12 +34,12 @@ sub run_simulation {
     $grid->open_node($n);
     
     # To the left
-    if ($n != 1 && $grid->is_open($n - 1) && ((($n % ($grid_size)) - 1) != 0)) {
+    if ($n != 1 && $grid->is_open($n - 1) && ((($n % $grid_size) - 1) != 0)) {
       $grid->union($n, ($n - 1));
     } 
   
     # To the right
-    if ($n != ($grid_size * $grid_size) && $grid->is_open($n + 1) && (($n % ($grid_size)) != 0)) {
+    if ($n != ($grid_size * $grid_size) && $grid->is_open($n + 1) && (($n % $grid_size) != 0)) {
       $grid->union($n, ($n + 1));
     }
   
