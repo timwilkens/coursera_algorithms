@@ -1,0 +1,91 @@
+Theory of Algorithms
+
+  The nature of our input can cause an algorithm's behavior to vary wildly
+
+  Best Case: lower bound on cost
+    - determined by "easiest" input
+    - provides a `goal` for all inputs
+
+  Worst Case: upper bound on cost
+    - determined by "most difficult" input
+    - provides a `guarantee` for all inputs
+
+  Average case: expected cost for random input
+    - need a model for "random"
+    - finds a way to predict performance
+
+  Example: Array accesses for brute-force 3-Sum
+    Best:    ~ 1/2 N^3
+    Average: ~ 1/2 N^3          
+    Worst:   ~ 1/2 N^3
+ 
+ Compare: Binary Search
+   Best: 1
+   Average: log(N)
+   Worst:   log(N)    
+
+  Actual data might not match input model:
+    Need to understand input to effectively process it
+    Approach 1: design for worst case
+    Approach 2: randomize, and then rely on probability
+
+  Goals:
+    - Establish "difficulty" of a problem
+    - Develop "optimal" algorithms
+
+  Approach:
+    - Suppress details in analysis: analyze "to within a constant factor"
+    - Don't worry about input, and instead focus on worst case design
+
+  Optimal Algorithm
+    - Performance guarantee 
+    - Proof that no algorithm can provide a better performance guarantee
+
+  Notations:
+
+     Big Theta       asymptotic order of growth        classify algorithms
+   
+     Big Oh          O(N^2) and smaller                develop upper bounds
+
+     Big Omega       O(N^2) and larger                 develop lower bounds
+
+  Example: 1-sum problem (is there a 0 in the array)
+
+    Upper Bound:
+      - Brute force: look at all array entries
+      - running time for the optimal algorithm is O(N)
+
+    Lower Bound:
+      - Have to examine all entries (any unexamined one might be a 0)
+      - running time of the optimal algorithm is Omega(N)
+
+    Optimal Algorithm
+      - lower bound equals the upper bound
+      - brute force for one sum is optimal: running time is Theta(N)
+
+    3-Sum Problem
+
+      Upper Bound
+        Brute Force - O(N^2 log(N))
+
+      Lower Bound
+        Have to examine all N entries
+        Running time of the optimal algo is Omega(N) 
+
+      Open problems
+        - Optimal algo for 3-Sum?
+        - Subquadratic algorithm or Quadratic lower bound for 3-Sum
+
+     Caveats:
+       - Too pessimistic to focus on the worst case?
+       - Too simple to want "within a constant factor"?
+
+     Common mistake - Interpreting big-Oh as an approximate model for the running time
+     This course - focus on approximate models - Tilde notation
+
+    Which of the following functions is O(N^3)?
+
+    1. 11 N + 15 log(N) + 100
+    2. 1/3 N^2
+    3. 25,000 N^3
+*   4. All of the above                Remember: big-Oh is the upper bound, not an approximation of running time

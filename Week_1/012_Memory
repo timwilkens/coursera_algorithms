@@ -1,0 +1,48 @@
+Memory usage
+
+  Million - 2^20  (bits)     Megabyte
+  Billion - 2^30  (bits)     Gigabyte
+
+  Modern machine - now assume a 64-bit machine with 8 byte pointers
+    - can address more memory
+
+  Typical memory usage for primitive types and arrays
+              bytes
+  boolean     1
+  byte        1
+  char        2
+  int         4
+  float       4
+  long        8
+  double      8
+
+  char arrays   2N + 24
+  int arrays    4N + 24
+
+  Objects - 16 bytes
+  Reference - 8 bytes
+  Padding - each object uses a multiple of 8 bytes
+
+  How much memory (in bytes) does a WeightedQuickUnionUF object use as a function of the number of elements N?
+
+  1. ~ N
+  2. ~ 2N
+  3. ~ 4N
+* 4. ~ 8N
+
+  Summary:
+
+    Empirical Analysis
+      Execute program to perform experiments
+      Assume power law and forumlate a hypothesis for running time
+      Model enables us to make predictions
+
+    Mathematical Analysis
+      Analyze algorithm to count frequency of operations
+      Use tilde notation to simplify analysis
+      Model enables us to explain behavior
+ 
+    Scientific Method
+      Mathematical model is independent of a particular system; applies to machines not yet built
+      Empirical analysis is necessary to validate mathematical models and to make predictions
+
