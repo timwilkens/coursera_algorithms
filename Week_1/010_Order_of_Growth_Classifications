@@ -1,0 +1,88 @@
+Order-of-Growth classifications
+
+  There aren't that many general forms (Tilde notations) of algorithms
+
+  Small set of functions includes:
+    1
+    log N
+    N
+    N log N          These generally suffice to cover order-of-growth
+    N^2
+    N^3
+    2 ^ N
+
+    Anything above N log N will not scale with the input
+      - We want to avoid quadratic or cubic as much as possible
+
+    Some examples:
+      No looping. Simple assignments                1 (constant)              add two numbers
+
+      Loop where input N is cut in half each time   log N (logarithmic)       binary search
+ 
+      Looping over the entire set                    N (linear)               find the max in a set
+ 
+      Divide and conquer                             N log N (linearthmic)    mergesort
+
+      Double loop                                    N^2  (quadratic)         check all pairs
+
+      Triple loop                                    N^3   (cubic)            check all triples
+
+      Exhaustive search                              2^N                      check all subsets             
+
+
+      Bottom line: We need linear or linearithmic algorithms to be able to work on large sets (in the millions)
+        - Any of the larger order of growth algos take FAR too long
+        - N^2 is too slow
+
+     Binary Search:
+
+       Goal: find a key in a sorted array
+
+       Method: compare against middle entry
+         if too big, go smaller.
+         if too small, go larger.
+         Continue recursively.
+         This has running time log N
+
+       Notorioulsy tricky to implement bug-free
+      
+       my $low = 0;
+       my $high = scalar @array - 1;
+       while ($low <= $high) {
+         my $mid = $low + ($high - $low) / 2;
+         if ($key < $array[$mid]) { $high = $mid - 1; }
+         elsif ($key > $array[$mid) { $low = $mid + 1; }
+         else { return $mid }
+       }
+       return -1; # not found
+
+
+       Proposition: Binary search uses at most 1 +log N compares to search ina sorted array of size N
+
+       Def: T(N) = the number of compares to binary search in a sorted subarray of size <= N
+
+       Binary Search recurrence: T(N) <= T(N / 2) + 1 for N > 1, with T(1) = 1
+
+       T(N) <= T(N / 2) + 1
+            <= T(N / 4) + 1 + 1
+            <= T(N / 8) + 1 + 1 + 1
+            ...
+            <= T(N / N) + 1 + 1 + ... + 1
+             = 1 + log(N) 
+
+       Sorting-base algorithm for the 3-Sum
+         Sort the N(distinct) numbers
+         For each pair of numbers a[i] and a [j], 
+          binary search for -(a[i] + a[j])
+
+        Analysis: order of growth is N^2 log(N) as opposed to N^3 as before
+      
+        Typically, better order of growth => faster in practice
+
+      Which of the following order-of-growth classifications represents the maximum number
+      of array accesses used to binary search a sorted array of size N?
+ 
+      1. constant
+  *   2. logarithmic
+      3. linear
+      4. linearithmic
