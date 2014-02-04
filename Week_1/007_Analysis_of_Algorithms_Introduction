@@ -1,0 +1,47 @@
+Analysis of Algorithms Introduction
+
+We are going to develop the mathematical foundations of algorithms
+
+Different points of view:
+  Programmer - needs a working solution
+  Client - wants to solve a problem efficiently
+  Theoretician - wants to understand
+  Student - may play any or all of the above roles
+
+Key to focus on: Running Time
+  "By what course of calculation can these results be arrived at by the machine in the shortest time?" - Charles Babbage (1864)
+
+  Reasons to analyze algorithms:
+    - Performance prediction       
+    - Compare performance of performance
+    - Make guarantees about performance
+    - Understand theoretical basis
+    ** Avoid performance bugs - keep client/user happy
+  
+    This course will focus on predicting and comparing algorithms
+
+  Examples of algorithmic success
+    - Discrete Fourier transform
+      - used in DVDs, JPEGs
+      - Easy way takes N^2 steps
+      - FFT algo takes N lg N steps - enables new technology
+
+    - N-body simulation
+
+  The Challenge - can my program solve a large practical input?
+    - Why is it slow?
+    - Why do I run out of memory?
+
+    Insight from Knuth - use the scientific process to understand the algorithmic process
+
+  Principles of research:
+    - Experiments must be reproducible
+    - Hypotheses must be falsifiable
+
+ Suppose that N equals 1 million. Approximately how much faster is an algorithm that performs N lg N operations
+  versus one that performs N^2 operations? (Lg is hte base-2 logarithmic function)
+
+  1. 20x
+  2. 1,000x
+* 3. 50,000x
+  4. 1,000,000x
