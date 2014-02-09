@@ -23,11 +23,7 @@ sub pop {
 
 sub is_empty {
   my $self = shift;
-  if (defined $self->[0]) {
-    return 0;
-  } else {
-    return 1;
-  }
+  return not defined $self->[0];
 }
 
 1;
