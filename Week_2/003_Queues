@@ -1,0 +1,16 @@
+Queues
+
+  Essentially the same API as the stack, but now we have enqueue and dequeue
+
+  But, dequeue and enqueue now pull from opposite ends of our data structure
+
+  Using linked lists, we have to maintain two pointers, one to the first item and one to the last item
+
+  Suppose that you implement a queue using a null-terminated singly-linked list, maintaining a reference
+    to the item least recently added (the front of the list) but not maintaining a reference to the item most
+    recently added (the end of the list). What are the worst case running times for enqueue and dequeue?
+
+   1. constant time for both
+   2. constant time for enqueue, and linear for dequeue
+*  3. linear time for enqueue and constant for dequeue   (returning the item at tour pointer position is constant; we must recalculate every time for enqueue)
+   4. linear time for both

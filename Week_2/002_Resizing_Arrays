@@ -1,0 +1,49 @@
+Resizing Arrays
+
+ Avoid client having to pass in a max capacity parameter
+
+ First try:
+    increase size of array on push
+    decerease by 1 on pop
+
+  This is too expensize!
+    need to copy all items into a new array
+    inserting n items takes time proportional to N^2 / 2
+
+  We want resizing, but we want to do it infrequently
+
+  Better: if array is full, create a new array of TWICE the size (repeated doubling), and copy items
+    This now takes time proportional to N (not N^2)
+    Amortized analysis (spreading the cost out)
+
+  How should we shrink the array?
+    First try: cut the array in half when the array is one-half full
+
+    Too expensive in the worst case!
+      Thrashing: if client does push-pop-push-pop when the array is full, we will double, halve, double, halve repeatedly
+
+   Better: halve the size of array when the array is one-quarter full
+    Invariant: the array is always between 25% and 100% full
+
+    Amortized analysis: average running time per operation over a worst-case sequence of operations
+
+    Proposition: starting from an empty stack, and sequence of M push and pop operations takes time proportional to M
+
+    Resizing array vs. linked list
+
+     Linked-list:
+       Every operation takes constant time in the worst case
+       Uses extra time and space to deal with the links
+ 
+     Resizing array:
+       Every operation takes constant amortized time
+       Less wasted time
+
+     Suppose that, starting from an empty data structure, we perform N push operations in our resizing array implementation
+       of a stack. How many times is the resize() method called?
+
+     1. constant
+*    2. logarithmic (resize is only called when N is a power of two)
+     3. linear
+     4. quadratic
+

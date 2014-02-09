@@ -1,0 +1,33 @@
+Many of these data structures are already present in libraries (java.util.List)
+
+  Problem with these libraries: design by committee problem
+    Become bloated and poorly-designed with lots of features
+
+  Stack applications:
+    parsing in a compiler
+    undo in a word processor
+    back button in a web browser
+
+    Compiler:
+      Function call: push local environment and return address
+      Return: pop return address and local environment
+
+      Can always use an explicit stack to remove recursion
+
+    Arithmetic expression evaluation:
+      Goal: evaluate infix expressions
+      (1 + ( ( 2 + 3) * ( 4 * 5 ) ) )
+
+      Two-stack algorithm (Djikstra)
+
+        Value: push on the value stack
+        Operator: push onto the operator stack
+        Left parenthesis: ignore
+        Right parenthesis: pop operator and two values
+          push the result of applying that operator
+          to those values onto the value stack
+
+      Correctness:
+        When algorithm encounters an operator surrounded by two values within parentheses, it leaves the result on the value stack
+        It will go from smallest scope outwards
+

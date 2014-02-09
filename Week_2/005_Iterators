@@ -1,0 +1,9 @@
+Ignoring iterators...
+
+  Bags: add items to a collection and iterate over them (when order doesn't matter)
+    We never remove
+
+    Easy to get from stack or queue:
+      Stack without pop
+      Queue without dequeue
+

@@ -1,0 +1,16 @@
+Generics
+
+  How should we implement stacks and queues of urls, ints, etc...
+
+  Initially, we would have to cut and paste to make separate classes for every type
+
+  Second attempt, create an abstract Object type class 
+    Client needs to cast input correctly
+
+  Third attempt: Java Generics
+    Avoid casting
+    Discover type mismatch errors at compile-time instead of run-time
+      We should welcome compile-time errors, and avoid run-time whenever possible
+
+
+    The array implementation still requires using a cast (the ugly cast)

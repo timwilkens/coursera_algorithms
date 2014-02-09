@@ -1,0 +1,106 @@
+Stacks
+
+Fundamental data types
+  Value - collection of objects
+  Operations - insert, remove, interate, test if empty
+  Intent is very clear when we insert elements
+  But, which item do we remove when we need another?
+
+  Stack: examine the item most recently added (LIFO - last in first out) Push to insert, Pop to remove
+  Queue: examine the item least recently added (FIFO - first in first out) Enqueue to insert, Dequeue to remove
+
+  Subtext: all about modular programming
+    Completely separate the interface and the implementation
+    We want modular, re-usable libraries
+
+    Benefits:
+      Client can't know details of implementation => client has many implementations to chose from
+      Implementation can't know details of client needs => many clients can re-use the same implementation
+      Design: creates modular, reusable libraries
+      Performance: use optimized implementation where it matters
+
+   Warmup stack API: stack of strings
+
+     StackOfStrings() - create an empty stack (constructor)
+     void push(String item) - insert a new string
+     String pop() - remove and return most recently added item
+     boolean isEmpty() - is the stack empty?
+
+    Simple test client: take in strings and pop from the stack on '-'
+
+    my $stack = Stack->new();
+
+    while (my $line = <STDIN>) {
+      if ($line eq '-') {
+        print $stack->pop() . "\n";
+      } else {
+        $stack->push($line);
+      }
+    }
+
+    Which of the following inputs to our stack test client does not produce the output: 5 4 3 2 1?
+
+    1. 1 2 3 4 5 - - - - -
+    2. 1 2 5 - 3 4 - - - -
+*   3. 5 - 1 2 3 - 4 - - -
+    4. 5 - 4 - 3 - 2 - 1 -
+
+    Initial implementation will involve using linked lists, and keeping a pointer to the initial element
+      Perl probably makes the most sense to just maintain an array using shift, and unshift
+
+    sub new {
+      my $class = shift;
+
+      return \[], $class;
+    }
+
+    sub push {
+      my ($self, $item) = @_;
+      unshift @$self, $item;
+    }
+
+    sub pop {
+      my ($self) = shift;
+      return $self->[0];
+    }
+
+    sub is_empty {
+      my $self = shift;
+      return defined $self->[0];
+    }
+
+   Stack: linked-lst implementation
+
+     Proposition: every operation takes constant time in the worst case
+
+     Proposition: a stack with N items uses ~ 40 N bytes (Java implementation)
+       Aside: analysis includes memory for the stack (but not the strings themselves, which the client owns)
+
+   Stack: array implementation
+
+     Uses array s[] to store N items on stack
+     push(): add new item at s[n]
+     pop(): remove item from s[N-1]
+
+     Question: faster in perl to push on the front or the back?
+
+     Defect: stack overflows when N exceeds capacity
+
+   Underflow: throw exception if pop from an empty stack
+
+   Java implementation has  problem where it maintains a reference in the stack to removed items.
+
+   Given a reference first to the first node of a null-terminated linked list with at least
+     two nodes, what does the code fragment below do?
+
+     Node x = first;
+     while (x.next.next != null) {
+       x = x.next;
+     }
+     x.next = null;
+
+   1. deletes the first node in the list
+   2. deletes the second node in the list
+   3. deletes the next to last node in the list
+*  4. deletes the last node in the list
+
