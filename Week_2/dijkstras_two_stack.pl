@@ -36,7 +36,6 @@ while (my $expression = <STDIN>) {
       }
       my $number = join("", @number);
       $values->push($number);
-      $numbers = Queue->new();
     }
    
     next if ($item eq '(');

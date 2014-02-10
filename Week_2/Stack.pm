@@ -1,4 +1,4 @@
-package Stack;
+package OtherStack;
 
 use strict;
 use warnings;
@@ -10,15 +10,15 @@ sub new {
   return bless \@self, $class;
 }
 
-sub push {
+sub push_it {
   my ($self, $item) = @_;
-  unshift @$self, $item;
+  push @$self, $item;
 }
 
-sub pop {
+sub pop_it {
   my $self = shift;
   die "Stack is empty!\n" if ($self->is_empty());
-  return shift @$self;
+  return pop @$self;
 }
 
 sub is_empty {
