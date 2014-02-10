@@ -30,11 +30,10 @@ while (my $expression = <STDIN>) {
     # We have to assume multi-digit numbers are not separated by spaces
 
     if (!$numbers->is_empty()) {
-      my @number; 
+      my $number; 
       while (not $numbers->is_empty) {
-        push @number, $numbers->dequeue();
+        $number .= $numbers->dequeue();
       }
-      my $number = join("", @number);
       $values->push($number);
     }
    
