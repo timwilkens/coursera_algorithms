@@ -1,0 +1,23 @@
+Selection sort
+
+  In iteration i, find index min of smallest remaining entry (only looking at entries larger than i)
+  Swap a[i] and a[min]
+
+  This is quadratic time: (n * (n + 1)) / 2
+    The number of compares is FIXED
+
+  Invariants:
+    At any time, all entries to the left of our index are in order
+    No item to the right or our index is smaller than an element on the left
+
+  N^2 / 2 compares, and about N exchanges (though this varies)
+
+  Running time is insensitive to input: Quadratic time, even if input is sorted
+  Data movement is minimal. Linear number of exhanges
+
+  How many compares does selection sort make when the input array is already sorted?
+  
+  1. linear
+* 2. quadratic
+  3. logarithmic
+  4. exponential
