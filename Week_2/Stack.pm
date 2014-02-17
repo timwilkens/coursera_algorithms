@@ -26,5 +26,11 @@ sub is_empty {
   return not defined $self->[0];
 }
 
+sub peek {
+  my $self = shift;
+  my $index = (scalar @$self - 1);
+  return $self->[$index];
+}
+
 1;
 

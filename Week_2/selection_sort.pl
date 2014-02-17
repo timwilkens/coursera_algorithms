@@ -5,7 +5,7 @@ use warnings;
 
 use List::Util qw(shuffle);
 
-my @nums = shuffle(1 .. 10);
+my @nums = shuffle(1 .. 500);
 print "@nums\n";
 selection_sort(\@nums);
 print "@nums\n";

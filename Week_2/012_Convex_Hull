@@ -1,0 +1,36 @@
+Convex Hull
+
+  The convex hull of a set of N points is the smallest perimeter fence enclosing the points
+    - smallet convex set containing all the points
+    - smallest area convex polygon enclosing the points
+    - convex polygon enclosing the points, whose vertices are points in the set
+
+  Output: shoudl be the sequence of vertices in counterclockwise order
+
+  Application: robot motion planning
+    - find shortest path in the plane from s to t that avoids a polygonal obstacle
+
+  Farthest pair problem: find points which are the furthest away from each other
+
+  Graham-scan
+    - start with point p (with the smallest y-coordinate
+    - sort points by polar angle with p (take a vertical line from p, and then sweep counterclockwise)
+    - consider points in order. discard the point unless it can create a ccw turn
+
+  Some implementation challenges
+    - how do you find p with the smallest y-coordinate?
+    - how do you sort points by polar angle with respect to p?
+    - how do you determine whether a turn sequence is counterclockwise?
+    - how do we sort efficiently?
+      - mergesort (N log N) would be much better than shellsort
+      - an efficient sorting algorithm enables these kinds of computation
+
+  Counterclockwise turns
+
+    Easy to do in the simple cases
+    What should be do with points in a straight line?
+
+    area = (b.x - a.x) * (c.y - a.y) - (b.y * a.y) * (c.x - a.x);
+    if (area < 0) return -1; #clockwise
+    else if (area > 0) return 1; #counterclockwise
+    else return 0; # linear

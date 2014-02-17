@@ -1,0 +1,35 @@
+Shuffling
+
+  Shuffle sort - generate a random real number for each array entry
+  Then, sort the array based on those numbers as the keys
+
+  Proposition - this produces a uniformly random distribution
+
+  Goal: rearrange the array so that the result is uniformly random, and done in linear time
+
+  Knuth shuffle: in iteration i, pick integer r between 0 and i
+    swap a[i] and a[r]
+   
+    Linear time shuffling algorithm making use of randomness
+
+    Common bug - do NOT pick a random element from the entire array to swap with (only look at what you have or haven't seen yet)
+
+    my $n = scalar @nums;
+
+    for (0 .. $n) {
+      swap(\@nums,$_,rand($_ + 1));
+    }
+
+  Real exploit in online poker:
+
+    Problems with shuffle implementation:
+      1. random number r never 52 => 52nd card can't end up in 52nd place
+      2. shuffle no uniform (should be between 1 and i)
+      3. random() uses 32-bit see => 2^32 possible shuffles
+      4. See = milliseconds since midnight => 86.4 million shuffles
+
+      Result: after seeing 5 cards and synchronizing with server clock, can determine all future cards in real time
+
+    "The generation of random numbers is too important to be left to chance"
+
+     Bottom line: shuffling a deck of cards is difficult to get right.
