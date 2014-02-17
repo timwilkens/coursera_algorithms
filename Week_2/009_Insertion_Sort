@@ -35,3 +35,11 @@ Insertion Sort
 
     For partially-sorted arrays, insertion sort runs in linear time.
       Proof: the number of exchanges equals the number of inversions
+
+How many compares does insertion sort make on an input array that is already sorted?
+
+  1. constant
+  2. logarithmic
+* 3. linear
+  4. quadratic
+

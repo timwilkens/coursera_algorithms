@@ -67,3 +67,10 @@ Shellsort
 
   Lesson: some good algorithms are still awaiting discovery
     - Has the potential to be faster than any other sorting algorithm we know of
+
+How many compares does shellsort(using the 3x + 1 increment) make on an input array that is already sorted?
+
+  1. constant
+  2. logarithmic
+  3. linear
+* 4. linearithmic

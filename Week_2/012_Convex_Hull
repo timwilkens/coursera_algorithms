@@ -34,3 +34,11 @@ Convex Hull
     if (area < 0) return -1; #clockwise
     else if (area > 0) return 1; #counterclockwise
     else return 0; # linear
+
+What is the maximum number of vertices that can be on the convex hull of a set of N points?
+
+  1. constant
+  2. logarithmic
+* 3. linear (N - imagine a circle. all will be on the hull)
+  4. linearithmic
+

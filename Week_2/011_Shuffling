@@ -33,3 +33,10 @@ Shuffling
     "The generation of random numbers is too important to be left to chance"
 
      Bottom line: shuffling a deck of cards is difficult to get right.
+
+How many possible permutations are there of a deck of 52 playing cards?
+
+  1. 2 ^ 52
+  2. 52 * 52 
+* 3. 52!
+  4. 52 ^ 52

@@ -13,7 +13,6 @@ my $hull = Stack->new;
 
 my @points;
 push @points, Point->new(0,0);
-push @points, Point->new(1,2);
 push @points, Point->new(4,4);
 push @points, Point->new(2,6);
 push @points, Point->new(0,8);
@@ -21,7 +20,6 @@ push @points, Point->new(-2,6);
 push @points, Point->new(-4,4);
 push @points, Point->new(-2,2);
 push @points, Point->new(0,5);
-push @points, Point->new(-1,4);
 
 my $p_index = find_p(\@points);  # lowest point on the y axis
 my ($xshift, $yshift) = normalize_points($p_index, \@points); # shift all so p is at 0,0
