@@ -1,0 +1,39 @@
+Sorting Complexity
+
+  Computational completixy - framework to study efficiency of algorithms for solving a particular problem
+
+  Model of computation - allowable operations
+  Cost model - operations count(s)
+  Upper bound - cost guarante provided by some algorithm (no algorithm can do worse)
+  Lower bound - proven limit on cost guarantee of all algorithms (nothing can do better
+  Optimal algorithm - algorithm with best possible cost guarantee
+
+  Example - sorting
+    model - decision tree
+    cost model - # of compares
+    Upper bound - ~ N log N from mergesort
+    Lower bound - ?
+    Optimal - ?
+
+  Proposition: any compare-based sorting algorithm must use at least log(N!) ~ N log N compares in the worst case
+
+  Binary tree of height h has AT MOST 2 ^ h leaves (upper bound)
+  N! different orderings => at least N! leaves
+
+ Mergesort is optimal with respect to the number of compares
+
+  Use theory as a guide, not an absolute way to measure performance
+    - Don't try to design algorithm that is more efficient than our lower bound
+
+  Lower bound may not hold if the algorithm has more info:
+    - initial order of the input
+    - distribution of key values
+    - representation of the keys
+
+  Under whith of the following scenarios does the N log N lower bound for sorting apply?
+  Assume that the keys are accesseg only through the compareTo() method unless otherwise specified.
+
+  1. five distinct keys
+* 2. no two keys are equal
+  3. keys in descending order
+  4. keys are strings and accessed via charAt() instead of compareTo()

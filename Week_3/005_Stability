@@ -1,0 +1,35 @@
+Stability
+
+  Typical application: sort by name, then sort by section
+
+  If we have already sorted by name, we want a rearrangement by section to KEEP the ordering by name
+
+  Insertion sort and Mergesort are stable
+  Selection sort and Shellsort are not stable
+
+  Note: need to carefully check code (less than vs less than or equal to)
+
+  Proposition: Insertion sort is stable
+    - we never move equal items past one another
+
+  Proposition: selection sort is not stable
+    - long distance exchange might move an item past some equal item
+
+    My thought is this can be stable if you do it right...
+    Never reset the min on '=' and scan left to right and you get a stable ordering
+
+  Proposition: mergesort is stable
+    - Depends on the merge operation
+    - If two keys are equal, we should take from the left subarray, not the right subarray
+
+  Given an array of points, which of the following approaches would be least useful for removing
+  duplicate points? Assume the point data type has the following three orders:
+    - A natural order that compares by x-coordinate and breaks ties by y-coordinate
+    - one comparator that compares by x-coordinate; another by y-coordinate
+
+  1. quicksort by natural order
+  2. quicksort by x-coordindate; mergesort by y-coordinate
+* 3. mergesort by x-coordinate; quicksort by y-coordinate  (since quicksort is not stable we may shuffle results)
+  4. mergesort by x-coordinate; mergesort by y-coordinate
+
+  Note: quicksort is an efficient, but unstable sorting algorithm

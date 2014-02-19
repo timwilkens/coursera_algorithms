@@ -1,0 +1,116 @@
+Mergesort
+
+  We have a full scientific understanding of this sorting method (as well as quicksort)
+
+  Basic sort in Java, Perl, C++, Python, etc...
+    - it is a stable sorting method (maintains order of equal elements)
+
+  Basic plan:
+    - divide array into two halves
+    - recursively sort each half
+    - merge two halves
+
+  Abstract in-place merge
+    Given two sorted aubarrays a[lo] to a[mid] and a[mid+1] to a[hi] replace with a[lo] to a[hi]
+
+    Do this using a copy of the entire array
+    We maintain three indeces - current place in first subarray, current place in second subarray, and position in final sorted array
+
+    Repeatedly compare smallest element in each subarray, and move the smaller into the final array
+      if elements are equal we always put the first one on the final array
+
+    my @copy;
+    for ($#nums) {
+      $copy[$_] = $nums[$_];
+    }
+    my $i = $low;
+    my $j = $mid + 1;
+
+    for (my $k = $low; $k <= $high; $k++) {
+      if ($i > $mid) { 
+        $nums[$k] = $copy[$j++];
+      } elsif ($j > $high) {
+        $nums[$k] = $copy[$i++];
+      } elsif ($copy[$j] < $copy[$i]) {
+        $nums[$k] = $copy[$j++];
+      } else { 
+        $nums[$k] = $copy[$i++];
+      }
+    }
+
+ 
+   Sort routine
+
+   if ($high <= $low) {
+     return;
+   }
+
+   my $mid = int($low + ($high - $low) / 2);
+   sort(@nums, $low, $mid);
+   sort(@nums, $mid + 1, $high); 
+   merge(@nums, $low, $mid, $high);
+
+  General algorithmic paradigm - Divide and Conquer
+
+  Insertion Sort vs. Merge Sort
+                          INSERTION SORT (N^2)                     MERGESORT (N log N)
+                 thousand     million    billion       thousand       million        billion
+home computer     instant     2.8 hours   317 years    instant        1 second       18 min
+super computer    instant     1 second    1 week        instant        instant        instant
+
+  Bottom line: good algorithm is much better than a supercomputer
+
+  Proposition: mergesort uses at most N log N compares and 6 N log N array accesses to sort any ANY array of size N
+    - can prove to ourselves using a recurrence relation
+
+    Think about steps being:                            N                       0 * N / 2 ^ 0
+                                                  N/2       N/2                 2 * N / 2 ^ 1
+                                               N/4   N/4  N/4   N/4             4 * N / 2 ^ 2
+                                                  ............
+
+     Using induction
+    
+         Base case: N = 1
+         Inductive hypothesis: D(N) = N log N
+         Goal: show that D(2N) = 2N log 2N
+
+          D(2N) =     2 D(N) + 2N   given
+                      2 NlogN + 2N    inductive hypothesis
+                      2N (log (2N) - 1) + 2N          algebra
+                      2N log 2N
+
+    Proposition: mergesort uses extract space proportional to N
+      The auxiliary array needs to be of size N for the last merge
+
+    Definition: a sorting algorithm is 'in-place' if it uses <= c log N extra memory
+      Ex: insertion sort, selection sort, shellsort
+
+   Practical improvements:
+     Use insertion sort for small subarrays.
+     Merge sort has too much overhead for tiny subarrays
+     cutoff to insertion sort for < 7 items
+
+      if ($high <= $low + CUTOFF - 1) {
+        insertionsort($nums, $lo, $high);
+        return;
+      }
+
+    Stop if already sorted
+      Is biggest element in first half <= smallest item in second half?
+      helps for partially-ordered arrays
+
+      if ($nums[$mid+1] > $nums[$mid]) { 
+        return; 
+      }
+
+    Eliminate the copy to the auxiliary array
+      save time (but not space)
+
+   How many compares does mergesort - the pure version without any optimizations -
+     make to sort an input array that is already sorted?
+
+    1. constant
+    2. logarithmic
+    3. linear
+    4. linearithmic
+     

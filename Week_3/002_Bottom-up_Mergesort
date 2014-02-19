@@ -1,0 +1,23 @@
+
+  Basic plan:
+    Pass through array, merging subarrays of size 1
+    repeat for subarrays of size 2, 4, 8, 16 ...
+
+    avoid recursion using this method
+
+    use the same merge code as before
+
+    for (my $size = 1; $size < scalar @nums; $size += $size) {  # executed log N times
+      for (my $low = 0; $low < scalar @nums - $size; $low += $size+$size) { 
+        merge($nums, $low, $low+$size-1, min($low+$size+$size+1, scalar @nums - 1));
+      }
+    }
+
+    same performance as the top-down version
+
+    How many passes (over the input array) does bottom-up mergesort make in the worst case?
+
+     1. constant
+ *   2. logarithmic
+     3. linear
+     4. linearithmic
