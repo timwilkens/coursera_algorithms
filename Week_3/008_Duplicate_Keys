@@ -1,0 +1,68 @@
+Duplicate Keys
+
+  Often, purpose of sort is to bring items with equal keys together
+    - sort opoulation by age
+    - remove duplicates from mailing list
+    - sort job applicants by college attended
+
+  Mergesort with dupe keys - always around N log N
+
+  Quicksort with dupe keys - goes quadratic unless partitioning stops on equal keys
+    - 1990s C user found this defect in qsort()
+
+    Mistake - put all items equal to the partitioning item on one side
+      Consequence - 1/2 N ^ 2 compares when all keys equal
+      
+    Recommended - stop scans on items equal to the partitioning item
+      Consequence - N log N compares when all keys equal
+
+    Desired  - put all itms equal to the partition IN PLACE
+
+  Goal - partition array into 3 parts
+    First => less than partition
+    Second => equal to partition
+    Third => greater than partition
+
+  Djikstra 3-way partitioning 
+
+    Need three pointers
+      - v , the pivot, will be a[lo]
+      - initialize lt to be lo, and gt to be the end of the array
+
+      Scan i from left to right
+
+        if (a[i] < v) => swap a[lt] and a[i]. lt++ and i++
+        if (a[i] > v) => swap a[gt] and a[i]. gt--
+        if (a[i] == v) => increment i
+
+    if ($high <= $low) {
+      return;
+    }
+   my $v = $nums->[$low];
+   my $lt = $low;
+   my $gt = $high;
+
+   my $i = $low;
+   while ($i <= $gt) {
+     if ($nums->[$i] < $v) {
+       swap($nums, $i++, $lt++);
+     } elsif ($nums->[$i] > $v) {
+       swap($nums, $i, $gt--);
+     } else {
+       $i++;
+     }
+   }
+   sort($nums, $low, $lt - 1);
+   sort($a, $gt + 1, $high);
+ 
+   This seems simpler and less error-prone than the initial implementation...
+     - lecturer agrees
+     - says it may be worth just using this implementation
+
+    This version of qsort is "entropy-optimal"
+
+    Bottom line - randomized quicksort with 3-way partitioning reduces
+      the running time from linearithmic to linear in a broad class of applications
+
+  
+

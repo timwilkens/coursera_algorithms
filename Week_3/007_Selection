@@ -1,0 +1,67 @@
+Selection
+
+  Goal: given an array of N items, find the kth largest
+  Ex: min (k = 0), max (k = N), mid (k = n/2)
+
+  Applications
+    - order statistics
+    - find the "top k"
+
+  Use theory as a guide:
+    Upper bound - N log N 
+      - sort the array (merge or quick) and then index into k to get the element
+    Easy upper bound for small sets - linear
+      - make k passes to find the element you are looking for
+    Easy lower bound - N
+      - we have to AT MINIMUM look at every item (otherwise we might miss something)
+
+  Which is true?
+    N log N lower bound? - is selection as hard as sorting?
+    N upper bound? - is there a linear-time algorithm for each k?
+
+ Quick-select - using the quicksort partition
+
+  Put entry a[j] into place
+    no larger entry to the left
+    no smaller entry to the right
+
+  Repeat in ONE of the subarrays, depending on j
+    - finished when j == k
+
+  shuffle($nums);
+  my $low = 0;
+  my $high = scalar(@$nums) - 1;
+
+  while ($high > $low) {
+    my $j = partition($nums, $low, $high);
+    if ($j < $k) {
+      $low = $j + 1;
+    } elsif ($j > $k) {
+      $high = $j - 1;
+    } else {
+      return $nums->[$k];
+    }
+    return $nums->[$k];
+  } 
+
+  similar idea to binary search, constantly narrowing our search window
+  
+  still requires a shuffle at the beginning
+
+  Proposition - Quick-select takes LINEAR time on average
+
+    Intuitively: the search space will be cut in ~ half each time
+      - we get N + N / 2 + N / 4 .... => 2N
+
+  Quick-select uses ~ 1/2 N ^ 2 compares in the worst case
+    - shuffling prevents this behaviour
+
+ There exists a compare-based selection algorithm whose worst-case running time is linear
+   - but, the constants are too high, so it is not used in practice
+
+  What is the expected running time to find the median using randomized quickselect?
+
+  1. constant
+  2. logarithmic
+* 3. linear
+  4. linearithmic
