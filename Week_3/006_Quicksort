@@ -1,0 +1,117 @@
+Quicksort - invented in 1961
+
+  Basic plan
+    - Shuffle the array
+    - Partition so that, for some j
+      - entry a[j] is in place
+      - no larger entry to the left of j
+      - no smaller entry to the right of j
+    - Sort each of the halves recursively
+
+  Mergesort divided the array, and then did the sorting
+  Quicksort sorts the items first and then divides the array
+
+  Partition:
+    - choose partion to be the first element in the array (OK since we have shuffled the array already)
+    - then set pointer i to the second elemend in the array (right after our partion) and j to the last element in the array
+
+    - scan i from left to right while a[i] < a[partition] (element belongs in the first half)
+    - scan j from right to left while a[j] > a[partition] (element belongs in the second half)
+      - when both conditions fail, swap a[i] and a[j]
+
+    - continue until the pointers have crossed
+      - exchange a[partition] and a[j] (j now points to the last element in the first half)
+      - array is now fully partitioned
+
+   my $pivot = $nums[0];
+   my $i = $low;
+   my $j = $high + 1;
+
+   while (1) {
+     while ($nums[$i++] < $pivot) {
+       if ($i == $high) {
+         break;
+       }
+     }
+
+     while ($pivot < $nums[$j++]) {
+       if ($j == $low) {
+         break;
+       }
+     }
+
+     if ($i >= $j) {
+       break;
+     }
+     swap(\@nums, $i, $j);   
+   }
+   swap(\@nums, $low, $j);
+   return $j;
+  }
+
+  High level - 
+
+
+  Quicksort {
+    shuffle(array);
+    sort(array, 0, array.length - 1)
+  }
+
+  Sort {
+    if ($high <= $low) {
+      return;
+    }
+    my $j = Partition(array, low, high);
+    Sort(array, low, j - 1); 
+    Sort(array, j + 1, high);
+  }
+
+  Partions in place - using an extra array makes partitioning easier (and stable), but is not worth the cost
+    - this is also one advantage quicksort has over mergesort - does not require N extra memory
+
+  Shuffling is NEEDED for performance guarantee
+
+  Quicksort IS faster than mergesort
+
+  To sort 1 million items on home computer  -   1.0 sec merge || 0.6 sec quick
+          1 billion itmes                   -   18 min merge  || 12 min quick
+
+    Lesson 1 - good algorithms are better than supercomputers
+    Lesson 2 - great algorithms are better than good ones
+
+  Best case - number of compares is N log N
+    Worst case - numbers of compares is ~ 1/2 N ^ 2
+      - this occurs when the array is ALREADY SORTED
+      - j poiner will look at (1 + 2 + .... N - 1) items
+      - I assume the array being completely reversed would produce similar behavior
+
+ Average-analysis
+
+    The average number of compares is ~ 2 N log N
+    and the average number of exchanges is ~ 1/3 N log N
+
+   Number of compares, in practice, hovers around 1.39 N log N
+     - 39% more compares than mergesort
+     - BUT faster than mergesort in practice because of less data movement 
+
+  Random shuffle -
+    - probabilistic guarantee against the worst case
+    - basis for math model that can be validated with experiments
+
+  Many implementations go quadratic if:
+    - the array is sorted or reverse sorted
+    - the array has many duplicates (even if randomized)
+
+  Quicksort is NOT stable
+    - partitioning does long-range exchanges that can swap keys of the same value
+
+  Practical improvements
+    - insertion sort small subarrays (as with mergesort)
+      - generally around 10 or 20 items left 
+      - could improve by 20%!
+    - or exit qsort when small subarrays are partially sorted, then do one insertion sort pass on the whole thing at the end
+
+    - choose pivot to be the median of sample
+      - choose three items, and use the middle item as the pivot
+      - increases the number of compares
+      - but could improve performance by 10%
