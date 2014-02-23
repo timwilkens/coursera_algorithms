@@ -1,0 +1,87 @@
+System Sorts
+
+  Sorting algorithms are essential in a broad variety of applications
+
+    - sort a list of names
+    - organize an MP3 library
+    - display Google PageRank results
+    - list RSS feed in reverse chronological order
+    - find the median
+    - binary search in a database
+    - identify statistical outliers
+    - find duplicates in a mailing list
+    - data compression
+    - computer graphics
+    - computational biology
+    - load balancing on a parallel computer
+
+  Java - uses tuned quicksort for primitive types
+       - tuned mergesort for objects (stable sort)
+
+    Why does Array.sort() in Java use mergesort instead of quicksort when sorting reference types?
+
+**    1. stability
+      2. N log N guaranteed performance
+      3. both 1 and 2
+      4. neither 1 or 2
+
+  Alternative to shuffling array prior to quicksorting:
+    
+    Tukey's ninther
+      - median of the median of 3 samples of 3 elements
+      - Select 9 (ninther) evently spaced elements in the array
+      - Find median of 1-3, 4-6, 7-9
+        - then take the median of those results
+        - uses at MOST 12 compares to determine the pivot item
+
+      Thought was that this would give better partioning that shuffle, and less costly
+     BUT - there is a problem with this method. It may seem to give better results on average,
+       at least intuitively, but it does not GUARANTEE performance in the way shuffling does
+
+       - There is a "killer input" that will break the Java system sort and either crash or go quadratic
+
+       Bottom-line: shuffling is needed for performance guarantee
+
+    There are hundreds of different sorting algorithms out there, we have just seen a select few.
+
+   Some things to consider when choosing a sorting algorithm:
+     - stable?
+     - parallel?
+     - deterministic?
+     - keys all distinct?
+     - multiple key types?
+     - linked list or array?
+     - large or small items?
+     - is your array randomly ordered?
+     - need guaranteed performance? 
+
+     It may be the case that for some set of conditions one of the elementary sorts is good enough
+
+     SORTING SUMMARY
+
+
+            |  inplacable?     stable?      worst?    average?     best?              remarks
+----------------------------------------------------------------------------------------------------------------------------------
+selection   |      Y                        N^2/2      N^2/2       N^2/2         only N exchanges
+
+insertion   |      Y              Y         N^2/2      N^2/4        N           use for small N or partially ordered
+
+shell       |      Y                          ?          ?          N           tightcode, subquadratic
+
+merge       |                     Y         NlogN      NlogN      NlogN         NlogN guarantee. stable
+
+quick       |      Y                        N^2/2      2NlogN     NlogN         NlogN probabilistic guarantee. fastest in practice
+
+3-way quick |      Y                        N^2/2      2NlogN       N           improves quicksort in presence of duplicate keys
+
+???         |      Y              Y         NlogN      NlogN      NlogN         holy sorting grail
+
+    - the "holy grail" is essentially an in-place mergesort
+      - there are some things that come close, but lecturer states they are too complicated to really be used
+
+  Why does Array.sort() in Java use quicksort instead of mergesort when sorting primitive types?
+
+    1. uses less memory
+    2. faster on typical inputs
+**  3. both 1 and 2
+    4. neither 1 or 2
