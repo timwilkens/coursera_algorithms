@@ -1,0 +1,123 @@
+Binary Heaps
+
+  Based on the idea of a complete binary tree
+
+    Binary tree - empty or node with links to left and right binary trees
+
+    Complete tree - perfectly balanced, except for bottom level
+
+    Property: height of complete tree with N nodes is floor log N
+      - height only increases when N is a power of 2
+
+  Binary heap - array representation of a heap-ordered complete binary tree
+
+    Heap-ordered binary tree
+      - keys in nodes
+      - Parent's key no smaller than children's keys
+
+    Array representation
+      - indices start at 1 (to make calculations easier)
+      - take nodes in level order
+      - no explicit links needed
+
+      Root of tree is always - a[1]
+        - this is the largest key
+
+      Use array indices to move through tree
+        - parent of node at k is k/2
+        - childen of node at k are 2k and (2k + 1)
+
+    Which of the following arrays does NOT represent a max-oriented binary heap
+
+    1. J I H G F E D C B A
+    2. A A A A A A A A A A
+    3. X V U S Q H G J M P
+**  4. V S N H G F D E I B     (I should not be a child of G)
+
+  
+  Promotion - Child's key becomes larger than its parent
+
+    To eliminate the violation
+      - exchange key in child with key in parent
+      - repeat until heap ordered is restored (moving up the nodes of the tree) 
+
+    sub swim {
+      my ($nums, $k) = @_;
+
+      while ($k > 1 && ($nums->[$k] > $nums->[$k/2])) {
+        swap($nums, $k, $k/2);
+        $k /= 2;
+      }
+    }
+
+    Insertion into heap:
+      - put element on the end of the heap
+      - "swim" it into place
+
+     Cost: at most 1 + logN compares
+
+  
+   Demotion: parent's key becomes smaller than one or both of its children
+
+    To eliminate the violation:
+      - exchange key in parent with key in larger child
+      - repeat until head order is restored
+
+    sub sink {
+      my ($nums, $k) = @_;
+      my $n = scalar(@$nums) - 1;
+
+      while (2 * $k <= $n) {    # don't go off the end of the heap
+        my $j = 2 * $k;
+
+        if ($j < N && ($nums->[$j] < $nums->[$j+1])) {
+          $j++;
+        }
+     
+        if ($nums->[$k] > $nums->[$j]) {
+          last;
+        }
+     
+        swap($nums, $j, $k);
+        $k = $j
+      }
+    }
+
+  Delete the maximum in a heap
+
+    - exchange root with node at end, then sink it down
+      Cost - at most 2 logN compares
+
+   API for priority queue will be: new    (array)
+                                   insert
+                                   deleteMax
+                                   is_empty
+
+                     Helpers : sink
+                               swim
+                               swap
+
+  There are other optimized verions - d-ary and Fibonacci, but they are much more complicated
+
+
+  Important consideration: Immutability of keys
+    - assumption - client does not change keys while they're on the PQ
+    - best practice - use immutable keys
+
+  Underflow:
+    - throw exception if deleting from empty queue
+
+
+  Usually implement two queue types: one min ordered and one max ordered
+
+  Also:
+    - possible to remove an arbitrary item
+
+  Suppose that an array a[] is a max-heap that contains the distinct integer keys 1,2,....,N with N >= 7. The key N must be in a[1] and the key
+    N - 1 must be in either a[2] or a[3]. Where must the key N - 2 be?
+
+    1. 2 or 3
+    2. 4, 5, 6, or 7
+**  3. 2, 3, 4, 5, 6, or 7
+    4. 1, 2, 3, 4, 5, 6, 7
+
