@@ -65,4 +65,10 @@ Duplicate Keys
       the running time from linearithmic to linear in a broad class of applications
 
   
+  Using 3-way partitioning with quicksort is most effective when the input has which
+    of the following properties?
 
+  1. all items distinct
+* 2. a few distinct items
+  3. items in strictly increasing order
+  4. items in strictly decreasing order

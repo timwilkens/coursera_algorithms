@@ -7,10 +7,16 @@ use List::Util qw(shuffle);
 sub quicksort {
   my ($nums, $low, $high) = @_;
 
+  shuffle($nums);
+  qsort($nums, $low, $high);
+}
+
+sub qsort {
+  my ($nums, $low, $high) = @_;
+
   if ($high <= $low) {
     return;
   }
-  shuffle($nums);
 
   my $pivot = $nums->[$low];
 
@@ -28,8 +34,8 @@ sub quicksort {
       $i++;
     }
   }
-  quicksort($nums, $low, ($first - 1));
-  quicksort($nums, ($second + 1), $high);
+  qsort($nums, $low, ($first - 1));
+  qsort($nums, ($second + 1), $high);
 }
 
 

@@ -18,11 +18,13 @@ use Benchmark;
 sub One {
   my $nums = make_nondupe_array();
   DijkstraThree::quicksort($nums, 0, (scalar(@$nums) - 1));
+  die unless (is_sorted($nums));
 }
 
 sub Two {
   my $nums = make_nondupe_array();
   QuickSort::quicksort($nums, 0, (scalar(@$nums) -1));
+  die unless (is_sorted($nums));
 }
 
 sub make_nondupe_array {
@@ -48,3 +50,15 @@ timethese (
   {'Dijkstra' => '&One',
    'Traditional' => '&Two'}
 );
+
+sub is_sorted {
+  my $nums = shift;
+  my $end = scalar(@$nums) - 2;
+
+  for my $i (0 .. $end) {
+    if ($nums->[$i] > $nums->[$i + 1]) {
+      return 0;
+    }
+  }
+  return 1;
+}
