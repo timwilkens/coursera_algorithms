@@ -1,0 +1,43 @@
+Heapsort
+
+  Basic plan for in-place sort
+    - create max-heap for all N keys
+    - repeatedly remove the maximum key
+
+  Heap construction - build max heap using bottom-up method (assume array entries indexed 1 to N)
+    - essentially go right to left, compare node to any children and sink when necessary
+
+    for (my $k = N/2; $k >= 1; $--) {
+      sink($nums, $k, N);
+    }
+
+  Sortdown - exchange root with last item, remove it, and then sink the first element
+
+    while (N > 1) {
+      swap($nums, 1, $N--);
+      sink($nums, 1, $N);
+    }
+
+  Need to convert our heaps to be able handle 0 index (change less and swap methods to decrement the indexes)
+
+  Trace shows this sorts 'backwards'. Largest element goes into place first.
+
+  Proposition: heap construction uses <= 2N compares and exchanges (linear to build a heap)
+  Propostion: Heapsort uses <= 2N log N compares and exchanges
+
+  Significance: in-place sorting algorithm with N log N worst-case
+    - mergesort - no, linear extra space
+    - quicksort - no, quadratic time in worst case
+    - heapsort - yes!
+
+  Bottom line: Heapsort is optimal for both time and space, but:
+    - inner loop longer than quicksort's (has to do more inside the loop)
+    - makes poor use of cache memory  (references are all over the place in memory)
+    - not stable
+
+  How many compares does bottom-up heap construction perform in the worst case?
+
+**  1. linear
+    2. linearthmic 
+    3. constant
+    4. logarithmic
