@@ -22,6 +22,45 @@ sub set_root {$_[0]->{root} = $_[1];}
 
 sub root {shift->{root};}
 
+sub min {
+  my $self = shift;
+  my $root = $self->root;
+
+  my $min = $self->_min_helper($root);
+  return $min->key;
+}
+
+sub _min_helper {
+  my ($self, $node) = @_;
+
+  if (!$node->left) {
+    return $node;
+  }
+  return $self->_min_helper($node->left);
+}
+
+# Max could be implemented in exactly the same way as min but going to the right
+
+sub get_keys {   # Returns keys in ascending order
+  my $self = shift;
+  my @keys;
+  $self->_add_on_keys($self->root, \@keys);
+
+  return @keys;
+}
+
+sub _add_on_keys {
+  my ($self, $node, $keys) = @_;
+
+  if (!$node) {
+    return;    # end of a branch
+  }
+
+  $self->_add_on_keys($node->left, $keys);
+  push @$keys, $node->key;    # switch to unshift and get them in reverse order
+  $self->_add_on_keys($node->right, $keys);
+}
+
 sub find {
   my ($self, $key) = @_;
   my $node = $self->root;

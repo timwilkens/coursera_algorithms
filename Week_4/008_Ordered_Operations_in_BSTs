@@ -1,0 +1,57 @@
+Ordered Operations in BSTs
+
+  To find min - go left from root
+  To find max - go right from root
+
+  Floor of some key value is harder to compute
+    - need to walk the tree   (root is relative throughout here)
+      Case 1: k equals the key at root - floor of k is k
+      Case 2: k is less than the key at the root - floor of k is in the left subtree
+      Case 3: k is greater than the key at root - floor of k is in the right subtree
+                                                - if right subtree is empty, floor of k is the root
+
+      if (x == null) return x;
+      int comp = key.compareTo(x.key)
+ 
+      if (cmp == 0) return x;
+   
+      if (cmp < 0) return floor(x.left, key);
+
+      Node t = floor(x.right, key);
+      if (t != null) return t;
+      else           return x;
+
+
+    To allow efficient implementations of count, rank, and select we keep a count at every node, of all nodes in the subtree
+
+      sub size {shift->{root}{size};}
+
+      - augment put method to increase the count before returning
+        x.count = 1 + size(x.left) + size(x.right)
+
+  Rank - 3 cases
+
+    Case 1 - key found -> return size of left subtree
+    Case 2 - key less than root -> return rank(key, x.left)
+    Case 3 - key greater than root -> return 1 + size(x.left) + rank(key, x.right)
+
+  How do we iterate through the keys?
+
+    Traverse the left subtree until the end
+    Enqueue the key
+    Traverse the right subtree
+
+  sub inorder {
+    if (x == null) return;
+    inorder(x.left, q);
+    enqueue(x.key);
+    inorder(x.right, q);
+  }
+
+    Places the keys in ascending order.
+      - could use a stack instead and receive them in reverse order
+
+    Most operations on the BST take log N (or h for the height of the tree)
+      - ordered iteration will be linear
+      - insertion ends up being much faster than binary search method on ordered arrays
+      - However, we can still have worst case behavior and get extremely tall trees
