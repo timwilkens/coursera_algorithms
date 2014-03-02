@@ -1,0 +1,55 @@
+Elementary symbol table implementations
+
+  use an unordered linked list
+    - linear search to look for key, if not found add to the front
+
+    - search and insert in worst case - N
+    - average case for search - N / 2
+    - no ability to iterate over keys in order
+
+  We want efficient algos for search and insert
+
+    Use binary search with parallel ordered arrays
+      - one array of keys
+      - one array of values 
+        - linked together by index value
+
+     To search, we do a binary search of the key array and return the matching index
+
+       - search now takes log N compares
+
+      sub get {
+        is ($table->isEmpty()){return null;}
+        my $i = rank(key);
+        if ($i < size && keys[i] == key) { return vals[i] }
+        else { return null };
+      }
+
+      sub rank {
+        my low = 0;
+        my high = size - 1;
+
+        while (low <= high) {
+          my mid = low + (high - low) / 2;
+          if (mid > key) {
+            high = mid -1 ;
+          } elsif (mid < key) {
+            low = mid + 1;
+          } else {
+            return mid;
+          }
+        }
+        return low;
+      }
+
+    Problem: inserting an element is painful, and requires moving all elements larger to the right by one in both keys and values
+
+    worst case: log N for search, and N for insert
+    average case: log N for search, N/2 for insert
+
+    What is the maximum number of array accesses needed to search for a key in a symbol table that is implemented with a sorted array?
+
+    1. constant
+**  2. logarithmic
+    3. linear
+    4. linearithmic

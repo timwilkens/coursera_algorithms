@@ -1,0 +1,19 @@
+Ordered Operations
+
+  Comparable keys allows us to use binary search to efficiently search our table
+  It also allows us to do some other intersting and useful things:
+    - return min and max key and value
+    - select kth largest
+    - select closest to k
+    - select between two keys
+
+  Our binary search implementation is great because search now takes log N compares
+    - BUT, insertion or deletion still costs N compares
+
+  What is the maximum number of compares to determine the rank of a key in a symbol table
+    that is implemented using a sorted array?
+
+  1. constant
+* 2. logarithmic
+  3. linear
+  4. linearithmic

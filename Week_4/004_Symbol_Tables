@@ -1,0 +1,42 @@
+Symbol Tables - API
+
+  Implement the following abstraction:
+    - insert a value with a specified key
+    - given a key, search for a specific value
+    - dictionary, hash table, etc....
+
+    EX: table with url(key) and IP address(value) - DNS lookup
+
+
+    Associative array abstraction: associate one value with each key
+      - put      : insert key value pair
+      - get      : return value for key
+      - delete   : remove key and value from table
+      - contains : is there a value paired with this key?
+      - isEmpty  : is the table empty?
+      - size     : number of key-value pairs
+      - keys     : return all the keys in a table
+
+      Conventions:
+        - values cannot be NULL
+        - get returns null if key not present
+        - put overwrites old value with new value
+          - this makes the contains method easy to implement {return get(key) != null}
+          - delete method can be lazy {put(key,null}
+
+       Some assumptions:
+         - keys are comparable
+         - keys are any generic type
+         
+    Best practice: use immutable types for symbol table keys
+
+    Java requirements on equals: For any references x,y,z
+      Reflexive: x.equals(x) is true
+      Symmetric: x.equals(y) iff y.equals(x)             The first three are the mathematical equivalence relation
+      Transitive: if x.equals(y) and y.equals(z) then x.equals(z)
+      Non-null:  x.equals(null) is false
+
+    In short: writing equality tests for objects is harder than it seems at first glance.
+
+    Essentially a tutorial on how to use a hash table API
+      - uses the example of reading in a giant text document and counting occurrences of words

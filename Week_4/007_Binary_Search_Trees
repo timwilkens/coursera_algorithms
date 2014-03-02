@@ -1,0 +1,74 @@
+Binary Search Trees
+
+  Classic data structure to make efficient implementation of a symbol table
+
+  A Binary Search Tree is a binary tree in symmetric order
+
+    A binary tree is either:
+      - empty
+      - two disjoin binary trees (left and right)
+
+    Symmetric order: each node has a key and every node's key is
+      - larger than all keys in its left subtree
+      - smaller than all keys in its right subtree
+
+  Java definition: a BST is a reference to a root Node
+    - a node is comprised of four fields
+      - a key and a value
+      - a reference to the left and right subtree
+
+  To search:
+    If less, go left
+    If greater, go right
+    If equal, return hit
+
+  To insert:
+    If less, go left
+    If greater, go right
+    If null, add item 
+
+  Get cost - 1 + depth of node in the tree
+
+  put method (insert) will return a reference to the new root
+
+  sub put {
+ 
+    if (node is null)
+      return new Node(key, value)
+
+      if (root key > input key)
+        left child of root = put(x.left, key val)
+      else if (root key < input key)
+        right child of root = put(x.right, key val)
+      else
+        x.value = value
+      return x
+    }
+
+  Cost of put - 1 + depth of node
+
+  There are MANY BST's that can correspond to the same set of keys
+    - best case - perfectly balanced
+    - average - semi-balanced
+    - worst - really tall tree (happens if input comes in sorted)
+   
+    - Tree shape will depend on the order of insertion of keys 
+
+  BST's correspond to quicksort partitioning
+    - everything less to one side, everything greater to the other side
+
+  Proposition: if N distinct keys are inserted into a BST in random order, the expected number of compares 
+    for a search/insert is ~2 log N
+
+    - expected height of tree for N distinct keys inserted in random order => ~4.311 log N
+
+    BUT, worst case order is N!
+      - need to solve some other way than shuffling since client will be providing keys most often in some order they choose
+
+    Suppose that N distinct keys are inserted into a binary search tree in random order. What is the expected number of
+      compares to search for one of the N keys?
+
+    1. constant
+*   2. logarithmic
+    3. linear
+    4. linearithmic
