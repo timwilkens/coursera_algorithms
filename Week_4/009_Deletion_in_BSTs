@@ -1,0 +1,42 @@
+Deletion in BSTs
+
+  Lazy approach - set value to null and leave key in tree
+    - create a "tombstone"
+    - this is ok on small sets, but we could create memory problems with large sets
+
+  Deleting the minimum
+    - Go left until you find a node with a null left link
+    - replace that node by the right link node
+    - update subtree counts (only necessary when keeping track of size etc..) 
+
+    this method will also work for deleting the max element
+
+  Hibbard deletion - delete node with key k
+
+    Search for node t containing key k
+
+    Case 0: node has 0 children
+            - set parent node to point to undef (easy case)
+
+    Case 1: node has 1 child
+            - set parent node to just point to the child 
+
+    Case 2: node has 2 children
+            - find the minimum node in the right subtree
+            - replace our node to delete with that min node
+
+    Problem with Hibbard deletion - not symmetric
+                                  - it will end up creating unbalanced, tall trees
+                                  => over time height approaches sqrt N not log N
+                                  - even switching between choosing from the right and left yields problems
+                                  - finding efficient deletion for BSTs is still an outstanding problem
+
+  This BST is still good, but it does not have a good enough performance guarantee for insertion and search (linear)
+
+  What is the expected height of a binary search tree with N keys after a long intermixed sequence
+    of random insertions and random Hibbard deletions?
+
+  1. log N
+* 2. sqrt N
+  3. N
+  4. N log N

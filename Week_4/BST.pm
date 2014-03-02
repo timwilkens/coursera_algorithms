@@ -4,6 +4,8 @@ use strict;
 use warnings;
 
 use Node;
+use Storable qw(dclone);
+use Data::Dumper;
 
 sub new {
   my ($class, $key, $value) = @_;
@@ -21,6 +23,49 @@ sub new {
 sub set_root {$_[0]->{root} = $_[1];}
 
 sub root {shift->{root};}
+
+sub delete {
+  my ($self, $key) = @_;
+  my $root = $self->root;
+  
+  $root = $self->_delete($root, $key);
+  $self->set_root($root);
+}
+
+sub _delete {
+  my ($self, $node, $key) = @_;
+
+  if (!$node) {return undef;}    # Node has no children
+
+  if ($key < $node->key) {
+    $node->set_left($self->_delete($node->left, $key));
+  } elsif ($key > $node->key) {
+    $node->set_right($self->_delete($node->right, $key));
+  } else {
+    if (!$node->right) {return $node->left;}  # Node has 1 child
+    if (!$node->left) {return $node->right;}  # Node has 1 child
+
+    my $temp = dclone($node);
+    $node = $self->_min_helper($temp->right);   # Get the smallest node in the right subtree
+    $node->set_right($self->_delete_min($temp->right));  # Remove the min and replace
+    $node->set_left($temp->left);
+  }
+  return $node;
+}
+
+sub remove_min {
+  my $self = shift;  
+  $self->_delete_min($self->root);
+}
+
+sub _delete_min {
+  my ($self, $node) = @_;
+
+  if (!$node->left) {return $node->right;}
+  
+  $node->set_left($self->_delete_min($node->left));
+  return $node;
+}
 
 sub min {
   my $self = shift;
