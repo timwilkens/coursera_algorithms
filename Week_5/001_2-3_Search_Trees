@@ -1,0 +1,70 @@
+2-3 Search Trees
+
+  Our goal for our symbol table implementaton is to have WORST-CASE behavior for search, insert, and delete be log N
+    - we also want to still be able to iterate over our keys in order
+
+  BSTs are good, but they do not provide us a guarantee on search and insert time
+
+  2-3 Tree
+
+   Allow 1 or 2 keys per node
+     - 2 node: one key, two children
+     - 3 node: two keys, three children
+
+     Perfect balance: every path from root to null link has same length
+     Symmetric order: inorder traversal yields keys in ascending order
+
+     If we have TWO keys in a node, the partitioning goes:
+       Left - less than smaller key
+       Middle - between the two keys
+       Right - larger than the bigger key
+
+    Search will be done recursively as before in BST
+      - we now may have 2 compares on each node
+
+    Insert: 
+      Key needs to go below empty two-node
+        - replace two node with single key, with a three node tree containing old key and new key
+
+      Key goes into empty 3-node
+        - add new key to 3-node to create temporary 4-node
+        - move middle key in 4-node into parent (creating a 3-node parent)
+        - split 2-node at bottom into middle and left/right node children
+
+    Construction from empty tree
+
+      - intial insert => single node with two null links
+      - second        => single node with three null links and two keys
+      - third         => three nodes, one parent, and two children each with two null links
+
+    height of tree only increases when the root ends up splitting
+
+  Splitting a 4-node is a 'local' transformation: constant number of operations
+    - shifting the nodes doesn't affect anything below (subtrees could be enormous)
+
+  Global properties
+    Invariants - maintains symmetric order and perfect balance
+
+    Proof: each transformation maintains these two
+
+  With perfect balance we can get a performance guarantee
+    - worst-case: height is log N (when all nodes are 2-nodes)
+    - best-case: height is log base 3 N (better than log N)
+    1 million nodes => between 12 and 20
+    1 billion nodes => betweren 18 and 30
+
+  Direct implementation is complicated because:
+    - maintaining multiple node types is cumbersome
+    - need multiple compares to move down tree
+    - need to move back up the tree to split 4-nodes
+    - larder number of cases for splitting
+
+  Bottom line: we could do it, but there's a better way
+
+  Suppose that you are inserting a new key into a 2-3 tree. Under which one of the following
+    scenarios must the height of the 2-3 tree increase by one?
+
+  1. when the number of keys equals one less than a power of two
+  2. when the number of nodes equals one less than a power of two
+  3. when the final node on the search path for the root is a 3-node
+* 4. when every node on the search path from the root is a 3-node

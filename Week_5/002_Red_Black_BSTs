@@ -1,0 +1,132 @@
+Red-Black BSTs
+
+  left-leaning red-black BSTs
+
+  1. represent 2-3 tree as a BST
+  2. use internal left-leaning links as glue for 3-nodes
+
+   
+  3-node         (a     b) 
+                /    |   \
+             < a  between > b
+
+  BST variation             (b)
+                           /   \
+                         (a)     > b
+                       /    \
+                     < a    between
+
+  'Red' links glue together node within a 3-node
+  'Black' links connect 2-nodes and 3-nodes
+
+  A Red-Black BST is a BST such that
+    - no node has two red links connected to it
+    - every path from root to null link has the same number of black links (perfect black balance)
+    - red links lean left
+
+  There is a 1-1 correspondence between 2-3 trees and RBTs
+
+  Search in a red-black BST is the SAME as in a standard BST
+    - the code can remain exactly the same
+    - many of the other operations are also identical
+
+  We need to know include some sort of reference to link color
+    - rather than putting explicit link colors in (creating link objects)
+      we just place a link color in every node for the color of the link from its parent
+       - every node can only have ONE link to it
+       - include a boolean method isRed
+
+  Left rotation - rotate a right leaning red link
+
+    method rotateLeft
+      confirm right link is red (assert)
+    
+      copy input node
+      input->right = copy->left
+      copy->left = input
+      copy->color = input->color
+      input->color = RED;
+      return copy;
+
+  Right rotation - sometimes need to turn a left leaning link and temporarily turn it to the right
+
+    method rotateRight
+      assert isRed(input->left)
+
+      temp = input->left
+      input->left = temp->right;
+      temp->right = input
+      temp->color = input->color
+      input->color = RED
+      return temp
+
+  Colorflip - recolor a node with two red links going from it
+
+    method colorFlip
+      assert !isRed(input)    # Three for debugging
+      assert isRed(input->left)
+      assert isRead(input->right)
+
+      input->color = RED
+      input->left->color = BLACK;
+      input->right->color = BLACK;
+
+  Every time we add a node, we create a RED link to the parent
+    - may require a rotate to correct inbalances
+
+  Insertion into tree with 1 node
+
+    Insert left => add node on left with a red link
+
+    Insert right => add node on right with red link, then rotateLeft
+    
+    - This method generalizes into inserting into any two-node at the bottom of the tree
+
+  Insertion into tree with 2 nodes
+
+    Key larger than both existing keys - insert on the right with red link, then color flip
+
+    Key smaller than both - insert on the far left, rotate the root to the right, then color flip
+  
+    Key in between two keys - rotate second node left, rotate root right, color flip
+
+  Insert into a 3-node at the bottom
+    - do standard BST insert; color new link red
+    - rotate to balance the 4-node (if needed)
+    - flip colors to pass red link up one level
+    - rotate to make lean left (if needed)
+
+
+    Right child red, left child black => rotate left
+    Left child, left-left grandchild red => rotate right
+    Both children red: flip colors
+
+  insert (Node h, Key keym Value val)
+
+    if (h == null) return new Node(key, val, RED)
+
+    int cmp = key.compareTo(h.key);
+    if (cmp < 0) h.left = put(h.left, key, val);
+    else if (cmp > 0) h.right = put(h.right, key, val);
+    else if (cmp == 0) h.val = val;
+
+    if (isRed(h.right) && !isRed(h.left)) h =rotateLeft(h);       # lean left
+    if (isRed(h.left) && isRead(h.left.left)) h = rotateRight(h);     # balance 4-node
+    if (isRed(h.left) && isRead(h.right)) flipColors(h);      # split 4-node
+
+    return h
+
+  Longest path (alternating red and black) can be at most twice as long as the shortest path (all black)
+
+    Proposition: height of three is <= 2 log N in the worst case
+    Proof:  every path from root to null link has the same number of black links
+            there are never two red-links in a row
+
+  Property: height of tree is ~1.00 log N in typical applications
+
+  Suppose that you insert N keys in ascending order into a red-black BST. What is the height of the resulting tree?
+
+    1. logarithmic
+    2. linear
+    3. linearithmic
+    4. quadratic
