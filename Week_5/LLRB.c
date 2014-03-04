@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 // This is just a BST for now, with no rebalancing
-// Now that this framework is in place converting to RBTree is not too hard
 
 struct Node;
 struct RedBlack;
@@ -63,12 +62,6 @@ int isRed (struct Node *node)
 
 void insert (struct RedBlack *tree, int key, int value)
 {
-  if (tree->root == NULL) {
-    struct Node *root = new_node(key, value, 1);
-    tree->root = root;
-    return;
-  }
-
   tree->root = put(tree->root, key, value);
 }
 
