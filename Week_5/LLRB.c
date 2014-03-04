@@ -68,8 +68,7 @@ void insert (struct RedBlack *tree, int key, int value)
 static struct Node* put (struct Node *node, int key, int value)
 {
   if (node == NULL) {
-    struct Node *temp_node = new_node(key, value, 1);
-    return temp_node;
+    return new_node(key, value, 1);
   }
 
   if (node->key > key) {
