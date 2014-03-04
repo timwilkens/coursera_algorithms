@@ -1,0 +1,39 @@
+1d Range Search
+
+  Generally - find the intersections amond geometric objects
+    - e.g. find all the points inside a given area
+
+  Applications in CAD, games, movies, databases etc...
+
+  Efficient solutions - binary search trees
+
+  1d range search
+    - extension of ordered symbol table
+
+    - keep standard operations: insert, search, delete
+    Add:
+        - range search - find all keys between k1 and k2
+        - range count - number of keys between k1 and k2
+
+    Geometric interpretation - keys are points on a line
+      - find/count points in a given 1d interval
+      - very similar problem to our standard symbol table
+        - we could use ordered array, unordered array, binary tree...
+
+    If we already have a rank function:
+      Number of keys in range:
+      if (contains(hi)) return rank(hi) + rank(lo) + 1;
+      else return rank(hi) + rank(lo);
+
+    1d range search: find all keys between lo and hi
+      - recursively find all keys in left subtree (if any could fall in range)
+      - check key in current node
+      - recursively find all keys in right subtree (if any could fall in range)
+
+    What is the worst case number of compares to perform a 1d range count if the keys are stored in an ordered array
+      and the 1d range search is performed efficiently?
+
+    1. constant
+*   2. logarithmic   (use binary search twice. Once per range point)
+    3. linear
+    4. linearithmic

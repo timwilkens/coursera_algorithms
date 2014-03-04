@@ -1,0 +1,29 @@
+Line Segment Intersection
+
+  Problem: orthogonal line segment intersection search
+    - Given N horizontal and vertical line segments, find all intersections
+
+    Quadratic Algorithm: check all pairs of line segments for intersection
+      - not practical for large sets
+
+      One assumption to simplify code: nondegeneracy - al x-y coordinates are distinct
+
+    Sweep-line algorithm
+      - sweep vertical line from left to right
+      - x-coordinates define events
+      - horizontal line-segment(left point) - insert y-coordinate into BST
+      - horizontal line-segment(right point) - remove y-coordinate from BST
+
+      - vertical line-segement - 1d range search for the y-coordinate interval
+
+    Takes time proportional to N log N + R
+
+  Bottom line: Sweep line reduces 2d orthogonal line segment intersectino search to 1d range search
+
+    What is the worst case running time of the sweep-line algorithm to find all R intersections
+      among N orthogonal line segments?
+
+    1. constant + R
+    2. log N + R
+*   3. N log N + R
+    4. N log N + R log N
