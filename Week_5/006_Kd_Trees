@@ -1,0 +1,98 @@
+Kd Trees
+
+  An extension of BSTs that allows us to do operations on points in space
+
+  Extension of ordered symbol-table to 2d keys
+    - insert a 2d key
+    - search for a 2d key
+    - range search: find all keys that line in a 2d range (rectangle)
+    - range count: number of keys that lie in a 2d range
+
+  Geometric interpretation - keys are points in the plane
+
+  Applications: networking, circuit design, databases
+
+  2d orthogonal range search - grid implementation
+    - divide space into M-by-M grid of squares
+    - create list of points contained in each square
+    - use 2d array to directly index relevant square
+    - insert: add (x,y) to list for corresponding square
+    - range search: examine only squares tha intersect 2d range query
+
+    Space: M^2 + N
+    Time: 1 + N/M^2
+
+      - Choose grid square to tune performance
+        - too small - wastes space
+        - too large - too many points per square
+        - rule of thumb - sqrtN by sqrtN grid
+
+      Running time
+        - initialize - N
+        - insert - 1
+        - search - 1 per point
+
+  Grid is good for EVENLY distributed points
+    - but, this does not often occur
+    - Instead data sets tend to be clustered - which forces most of the data into a single square (few squares)
+
+  Example: US population data
+    - half the squares would be empty
+    - half the points are in only 10% of the squares
+
+  Space-partitioning tree
+    - use a tree to represent a recursive subdivision of 2d space
+
+    Grid - divide space uniformly into squares
+    2d tree - recursively divide space into two halfplanes
+      - Applications
+        - ray tracing, flight simulators, n-body simulation, astronomical databases, shadow casting, nearest neighbor search
+
+
+  2d tree construction
+    - recursively partition plane into two halfplanes
+
+    - First point analyzed will divide the space in half vertically, points to the left are 
+      left in the tree and points to the right in space are to the right 
+    - Second point seen will divide the space in half horizontally
+    - We will continue by alternating divisions vertically and horizontally (switch between looking at x coordinate and y coordinate)
+
+  Data Structure - BST but alternate using x and y coordinates as key
+    - even levels - divide vertically (is it left or right of our point. x coor)
+    - odd levels - dividie horizontally (is this above or below. y coor)
+
+    - same code as BST, but now we alternate what functions as the 'key'
+
+  Goal: find all points in a query axis-aligned rectangle
+    - check if point in node lies in given rectangle
+    - recursively search left/bottom
+    - recursively search right/top
+
+    Range search in a 2d tree
+      - typical case - number of points returned + log N
+      - worst case (assuming tree is balanced) - number of points returned + sqrt N
+
+    Goal: find closest point to query point - Nearest neighbor
+      - check distance from point in node to query point
+      - recursively search left/bottom (if it could contain closer)
+      - recursively search right/top (if it could contain closer)
+      - organized method so that it begins by searching for query point
+
+      Typical case - log N
+      Worst case - N (circular arrangement with query point in the center)
+
+   When performing nearest neighbor search, we organize the recursive method so that when there are
+     two possible subtrees to go down, we always choose the subtree that is on the same side of the splitting
+     line as the query point as the first subtree to explore. What is the main reason for doing so?
+
+   1. simplify code
+   2. ensure correctness
+*  3. improve performance in practice
+   4. improve performance in worst case
+
+  Kd tree - recursively partition k-dimensional space into 2 halfspaces
+    - implementation - BST, but cycle through dimensions ala 2d trees
+
+  Efficient and simple data structure for processing k-dimensional data
+    - widely used
+    - adapts well to high-dimensional and clustered data
