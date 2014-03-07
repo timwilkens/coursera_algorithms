@@ -6,6 +6,7 @@ no warnings 'recursion';
 
 use Point;
 use POSIX qw(floor);
+use Data::Dumper;
 
 sub new {
   my ($class, @points) = @_;
@@ -35,8 +36,9 @@ sub _construct_kd_tree {
   my $point = Point->new($points->[$median][0],$points->[$median][1]);
 
   $axis = ($axis + 1) % 2;
+  my $end = scalar(@$points) - 1;
   $point->{left} = _construct_kd_tree($axis,[@$points[0 .. ($median - 1)]]);
-  $point->{right} = _construct_kd_tree($axis, [@$points[($median + 1) .. (scalar(@$points) - 1)]]);
+  $point->{right} = _construct_kd_tree($axis, [@$points[($median + 1) .. $end]]);
   return $point;
 }
 
@@ -44,15 +46,13 @@ sub _find_median {
   my ($axis, $points) = @_;
 
   _sort_points_by_axis($axis, $points);
-
   my $median = floor(scalar(@$points) / 2);
 
-  if ($axis) {
-
+  if ($axis) {  # X axis
     if ($points->[$median][0] < $points->[0][0]) {
       return $median++;
     }
-  } else {
+  } else {   # Y axis
     if ($points->[$median][1] < $points->[0][1]) {
       return $median++;
     }
@@ -108,60 +108,79 @@ sub find_neighbor {
 }
 
 sub _nearest_neighbor {
-  my ($point, $x, $y, $axis) = @_;
-
+  my ($point, $x, $y, $axis, $best_point, $best_distance) = @_;
   my $current_point_distance = _distance($x, $y, $point->x, $point->y);
 
-  if (!$point->left && !$point->right) { # Leaf case
-    return ($point, $current_point_distance);
+  if (!$best_point || ($best_distance > $current_point_distance)) {  # First call on root OR current position better than best
+    $best_point = $point;
+    $best_distance = $current_point_distance;
+  }
+
+  if (!$point->left && !$point->right) {        # Leaf case
+    return ($best_point, $best_distance);
   }
 
   my $point_value = $axis ? $point->x : $point->y;
   my $seeking_value = $axis ? $x : $y;
 
-  my $other_child;
-  my $next_child;
+  my $other_child;     
+  my $next_child;     # The most likely place for closer point
 
-  if ($point_value < $seeking_value) {
+  if ($point_value > $seeking_value) {
     $other_child = $point->right;
     if ($point->left) {
-      $next_child = $point->left;          # Go left
+      $next_child = $point->left;          # Go left if we can
     }
   } else {
     $other_child = $point->left;
     if ($point->right) {
-      $next_child = $point->right;    # Go right
+      $next_child = $point->right;    # Go right if we can
     }
   }
 
-  my $return_point;
-  my $best_distance;
-
   if ($next_child) {
-    ($return_point, $best_distance) = _nearest_neighbor($next_child, $x, $y, (($axis + 1) % 2));
+    ($best_point, $best_distance) = _nearest_neighbor($next_child, $x, $y, (($axis + 1) % 2), $best_point, $best_distance);
   }
-
-  if ((!$return_point && !$best_distance) || ($current_point_distance < $best_distance)) {
-    $return_point = $point;
-    $best_distance = $current_point_distance;
-  }
-
 
   if ((abs($point_value - $seeking_value) < $best_distance) && $other_child) {  # Closer point could be on the other branch
-    my ($contender, $contender_distance) = _nearest_neighbor($other_child, $x, $y, (($axis + 1) % 2));
+    my ($contender, $contender_distance) = _nearest_neighbor($other_child, $x, $y, (($axis + 1) % 2), $best_point, $best_distance);
     if ($contender_distance < $best_distance) {
-      $return_point = $contender;
+      $best_point = $contender;
       $best_distance = $contender_distance;
     }
   }
 
-  return ($return_point, $best_distance);
+  return ($best_point, $best_distance);
 }
 
 sub _distance {
   my ($x1, $y1, $x2, $y2) = @_;
 
   return sqrt((($x1-$x2)**2) + (($y1-$y2)**2));
+}
+
+sub brute_force_search {
+  my ($self, $x, $y) = @_;
+
+  my $point = _walk_and_store($self->{root}, $x, $y);
+
+  return ($point->[0], $point->[1]);
+}
+sub _walk_and_store {
+  my ($point, $x, $y, $points) = @_;
+
+  if (!$point) { return; }
+  if (!$points) { $points = []; }
+
+  _walk_and_store($point->left, $x, $y, $points);
+  my $distance = _distance($x, $y, $point->x, $point->y);
+  if (!$points->[1] || ($distance < $points->[1])) {
+    $points->[0] = $point;
+    $points->[1]= $distance;
+  }
+  _walk_and_store($point->right, $x, $y, $points);
+ 
+  return $points;
 }
 
 1;
