@@ -2,17 +2,15 @@ package KDTree;
 
 use strict;
 use warnings;
+no warnings 'recursion';
 
 use Point;
 use POSIX qw(floor);
-use Data::Dumper;
 
 sub new {
-  my ($class, %points ) = @_;
+  my ($class, @points) = @_;
 
-  my @points = map { [$_, $points{$_}] } keys %points;
   my $tree = _build_tree(@points);
-
   return bless $tree, $class;
 }
 
@@ -106,68 +104,58 @@ sub _put {
 sub find_neighbor {
   my ($self, $x, $y) = @_;
 
-  my ($point, $distance) = _nearest_neighbor($self->{root}, $x, $y, 0);
-  print _distance($x,$y,$point->x,$point->y) . "\n";
-  return $point;
+  return _nearest_neighbor($self->{root}, $x, $y, 0);
 }
 
 sub _nearest_neighbor {
   my ($point, $x, $y, $axis) = @_;
 
-  return if (!$point);
-
-  my $distance = _distance($x, $y, $point->x, $point->y);
+  my $current_point_distance = _distance($x, $y, $point->x, $point->y);
 
   if (!$point->left && !$point->right) { # Leaf case
-    return ($point, $distance);
+    return ($point, $current_point_distance);
   }
-  my $test_value = $axis ? $point->x : $point->y;
-  my $comparison_value = $axis ? $x : $y;
 
-  my $other_point;
-  my $go_down_point;
+  my $point_value = $axis ? $point->x : $point->y;
+  my $seeking_value = $axis ? $x : $y;
 
-  if ($comparison_value < $test_value) {
-    $other_point = $point->right;
+  my $other_child;
+  my $next_child;
+
+  if ($point_value < $seeking_value) {
+    $other_child = $point->right;
     if ($point->left) {
-      $go_down_point = $point->left;          # Go left
-    } else {
-      return ($point, $distance);
+      $next_child = $point->left;          # Go left
     }
   } else {
-    $other_point = $point->left;
+    $other_child = $point->left;
     if ($point->right) {
-      $go_down_point = $point->right;    # Go right
-    } else {
-      return ($point, $distance);
+      $next_child = $point->right;    # Go right
     }
   }
 
-  my ($point1, $point1_distance) = _nearest_neighbor($go_down_point, $x, $y, (($axis + 1) % 2));
+  my $return_point;
+  my $best_distance;
 
-  if (($distance < $point1_distance)) {
-    if ($other_point) {
-      my $v = $axis ? $point->x : $point->y;
-      if (1) {
-        my ($point2, $point2_distance) = _nearest_neighbor($other_point, $x, $y, (($axis + 1) % 2));
-        if ($point2_distance < $distance) {
-          return ($point2, $point2_distance);
-        }
-      }
-    }
-    return ($point, $distance);
-  } else { 
-    if ($other_point) {
-      my $v = $axis ? $point1->x : $point1->y;
-      if (1) {
-        my ($point2, $point2_distance) = _nearest_neighbor($other_point, $x, $y, (($axis + 1) % 2));
-        if ($point2_distance < $point1_distance) {
-          return ($point2, $point2_distance);
-        }
-      }
-    }   
-    return ($point1, $point1_distance);
+  if ($next_child) {
+    ($return_point, $best_distance) = _nearest_neighbor($next_child, $x, $y, (($axis + 1) % 2));
   }
+
+  if ((!$return_point && !$best_distance) || ($current_point_distance < $best_distance)) {
+    $return_point = $point;
+    $best_distance = $current_point_distance;
+  }
+
+
+  if ((abs($point_value - $seeking_value) < $best_distance) && $other_child) {  # Closer point could be on the other branch
+    my ($contender, $contender_distance) = _nearest_neighbor($other_child, $x, $y, (($axis + 1) % 2));
+    if ($contender_distance < $best_distance) {
+      $return_point = $contender;
+      $best_distance = $contender_distance;
+    }
+  }
+
+  return ($return_point, $best_distance);
 }
 
 sub _distance {
