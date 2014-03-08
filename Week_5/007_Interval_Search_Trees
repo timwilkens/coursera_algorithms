@@ -1,0 +1,47 @@
+1d Interval Search
+
+  - Data structure to hold set of overlapping intervals
+  - API - Insert
+        - Search
+        - Delete
+        - Interval intersection query - given an interval, find all intervals that intersect it
+          - Nondegeneracy assumption - no two intervals have the same left endpoint
+
+  Interval Search Tree
+    - create BST, where each node stores an interval (lo, hi)
+    - use left endpoint as BST key
+    - store max endpoint in subtree rooted at node
+
+  Insertion
+    - insert into BST using lo as the key
+    - update max in each node on search path (on the way up)
+      - compare right endpoint of interval inserted against the max in the path taken
+
+  Interval search (to find any one interval that intersects)
+    - If interval in node intersects query interval, return it
+    - else if left subtree is null, go right
+    - else if max endpoint in left subtree is less than lo, go right
+    - else go left
+
+  my $node = $tree->{root}
+
+  while ($node) {
+    if ($node intersects interval) {
+      return $node;
+    } elsif (!$node->left) [
+      $node = $node->right;
+    } elsif ($node->left->max < interval lo) {
+      $node = $node->right;
+    } else {
+      $node = $node->left;
+    }
+  }
+
+  Implement using a red-black BST to guarantee performance
+    - insert              - log N
+    - find                - log N
+    - delete              - log N
+    - find one interval   - log N
+    - find all intersects - R log N  (best in theory: R + log N)
+
+    Brute force solution is linear for all ops except insert (which is constant in an unordered array)

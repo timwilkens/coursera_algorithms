@@ -1,0 +1,27 @@
+Rectangle Intersection
+
+  Goal: find all intersections among a set of N orthogonal rectangles
+    Quadratic algo: check all pairs of rectangles for intersection
+ 
+    - non-degeneracy assumption: all x and y coordinates are distinct
+
+  Microprocessors and geometry: 1970s microprocessor design becomes a geometric problem
+    - certain wires cannot intersect
+    - certain spacing needed between types of wires
+
+  Algorithms and Moore's Law
+    - Moore's Law - processing power doubles every 18 months
+
+    Bootstrapping - we get to use the faster computer for bigger circuits
+
+    But bootstrapping is not enough if using a quadratic algorithm
+    Bottom-line - linearithmic algorithm is necessary to sustain Moore's Law
+
+  Sweep-line algorithm
+    - sweep vertical line from left to right
+    - x coordinates of left and right endpoints define events
+    - maintain set of rectangles that intersect the sweep line in an interval search tree(using y-intervals of rectangle)
+    - left endpoint: interval search for y-interval of rectangle. insert y-interval
+    - right endpoint: remove y-interval
+
+  Sweep line reduces 2d orthogonal rectangle intersection search to 1d interval search
