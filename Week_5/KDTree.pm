@@ -32,6 +32,7 @@ sub _construct_kd_tree {
     return Point->new($points->[0][0], $points->[0][1]);
   }
 
+  _sort_points($axis, $points);
   my $median = _find_median($axis, $points);
   my $point = Point->new($points->[$median][0],$points->[$median][1]);
 
@@ -45,7 +46,6 @@ sub _construct_kd_tree {
 sub _find_median {
   my ($axis, $points) = @_;
 
-  _sort_points_by_axis($axis, $points);
   my $median = floor(scalar(@$points) / 2);
 
   if ($axis) {  # X axis
@@ -60,10 +60,8 @@ sub _find_median {
   return $median;
 }
 
-sub _sort_points_by_axis {
+sub _sort_points {
   my ($axis, $points) = @_;
-
-  if ((@$points == 1) || (@$points == 0)) {return;}  
 
   if ($axis) {
     @$points = sort { $a->[0] <=> $b->[0] } @$points;
@@ -101,6 +99,25 @@ sub _put {
   return $point;
 }
 
+sub find_neighbors {
+  my ($self, $x, $y, $start, $end) = @_;
+  my @points;
+
+  for (1 .. $end) {
+    my ($point, $distance) = _nearest_neighbor($self->{root}, $x, $y, 0);
+    if ($_ >= $start) {
+      push @points, $point;
+    }
+    $point->{seen} = 1;  # Mark
+  }
+
+  for my $point (@points) {  # Unmark
+    $point->{seen} = undef;
+  }
+
+  return @points;
+}
+
 sub find_neighbor {
   my ($self, $x, $y) = @_;
 
@@ -111,7 +128,7 @@ sub _nearest_neighbor {
   my ($point, $x, $y, $axis, $best_point, $best_distance) = @_;
   my $current_point_distance = _distance($x, $y, $point->x, $point->y);
 
-  if (!$best_point || ($best_distance > $current_point_distance)) {  # First call on root OR current position better than best
+  if (!$point->seen && (!$best_point || ($best_distance > $current_point_distance))) {  # First call on root OR current position better than best
     $best_point = $point;
     $best_distance = $current_point_distance;
   }
@@ -139,12 +156,16 @@ sub _nearest_neighbor {
   }
 
   if ($next_child) {
-    ($best_point, $best_distance) = _nearest_neighbor($next_child, $x, $y, (($axis + 1) % 2), $best_point, $best_distance);
+    my ($next_point, $next_distance) = _nearest_neighbor($next_child, $x, $y, (($axis + 1) % 2), $best_point, $best_distance);
+    if (!$next_point->seen) {
+      $best_point = $next_point;
+      $best_distance = $next_distance;
+    }
   }
 
   if ((abs($point_value - $seeking_value) < $best_distance) && $other_child) {  # Closer point could be on the other branch
     my ($contender, $contender_distance) = _nearest_neighbor($other_child, $x, $y, (($axis + 1) % 2), $best_point, $best_distance);
-    if ($contender_distance < $best_distance) {
+    if (($contender_distance < $best_distance) && !$contender->seen) {
       $best_point = $contender;
       $best_distance = $contender_distance;
     }
@@ -159,6 +180,23 @@ sub _distance {
   return sqrt((($x1-$x2)**2) + (($y1-$y2)**2));
 }
 
+sub brute_force_search_rank {
+  my ($self, $x, $y, $end) = @_;
+  my @points;
+
+  for (1 .. $end) {
+    my ($point, $distance) = _walk_and_store($self->{root}, $x, $y);
+    push @points, $point->[0];
+    $point->[0]{seen} = 1;
+  }
+
+  for my $point (@points) {
+    $point->{seen} = undef;
+  }
+
+  return @points;
+}
+
 sub brute_force_search {
   my ($self, $x, $y) = @_;
 
@@ -166,6 +204,7 @@ sub brute_force_search {
 
   return ($point->[0], $point->[1]);
 }
+
 sub _walk_and_store {
   my ($point, $x, $y, $points) = @_;
 
@@ -174,7 +213,7 @@ sub _walk_and_store {
 
   _walk_and_store($point->left, $x, $y, $points);
   my $distance = _distance($x, $y, $point->x, $point->y);
-  if (!$points->[1] || ($distance < $points->[1])) {
+  if (!$points->[1] || (($distance < $points->[1]) && !$point->seen)) {
     $points->[0] = $point;
     $points->[1]= $distance;
   }

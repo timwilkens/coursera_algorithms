@@ -11,6 +11,7 @@ sub new {
   $self{y} = $y;
   $self{left} = undef;
   $self{right} = undef;
+  $self{seen} = undef;
 
   return bless \%self, $class;
 }
@@ -19,6 +20,7 @@ sub right {shift->{right};}
 sub left  {shift->{left};}
 sub x   {shift->{x};}
 sub y {shift->{y};}
+sub seen{shift->{seen};}
 
 1;
 
