@@ -1,0 +1,51 @@
+Hash Functions
+
+  Hashs are another implementation for our general symbol table API
+  - faster than binary trees, but do not support ordered iteration
+
+  Basic plan: save items in a key-indexed table(index is a function of the key)
+    Hash Function: method for computing array index from key
+
+  Issues
+    - computing the hash function
+    - equality test - method for checking whether two keys are equal
+    - collision resolution - algorithm and data structure to 
+      handle two keys that hash to the same array index
+
+  Classic space-time tradeoff
+    - no space limitation: trivial hash function with key as index
+    - no time limitation: trivial collision resolution with sequential search
+    - space and time limitations: hashing (real world)
+
+  Idealistic goal: scramble the keys uniformly to produce a table index
+    - efficiently computable
+    - each table index equally likely for each key
+
+    Practical challenge: need different approach for each key type
+
+  All Java classes inherit a metho hashCode(), which returns a 32-bit int
+ 
+    Requirement: if x == y  => hashCode(x) == hashCode(y)
+    
+    Highly desirable: if x != y  => hashCode(x) != hashCode(y)
+      - this is collision resistance
+
+    Default implementation: memory address of the object
+      - meets requirements, except uniform random distribution
+
+  Java caches hash values for strings in an instance variable
+    - works because strings are immutable
+
+  hashCode returns an int between -2^31 and 2^31 - 1
+  hash function - an int between 0 and M-1 (for use as array index)
+
+    - care must be taken when converting the return from hashCode
+      - can't do % M on negative number
+      - can't take abs value of number since -2^31 will overflow 
+
+  Uniform hashing assumption - each key is equally likely to hash to an integer between 0 and M - 1
+
+  Bins and balls - throw balls uniformaly at random into M bins
+    - birthday problem - expect two balls in the same bin after ~ sqrt(pi * (M / 2)) tosses
+    - coupon collector - expect every bin has >= 1 ball after ~ M ln M tosses
+    - load balancing - after M tosses, most loaded bin has log M/ log log M balls

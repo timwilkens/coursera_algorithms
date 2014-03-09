@@ -1,0 +1,13 @@
+Collision - two distinct keys hashing to same index
+  - birthday problem => can't avoid collisions unless we have quadratic amount of memory
+  - coupon collector + load balancing => collisions will be evenly distributed
+
+  Challenge: deal with collisions efficiently
+
+  Separate chaining
+    - use an array of M < N linked lists
+    Hash -  map key to integer i between 0 and M - 1
+    Insert - put at front of ith chain
+    Search - need to search only ith chain
+
+  - means you will only have to look for ~ M/N entries (assuming even distribution in hashing)
