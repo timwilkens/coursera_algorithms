@@ -99,6 +99,28 @@ sub _put {
   return $point;
 }
 
+sub radius_search {
+  my ($self, $x, $y, $radius) = @_;
+  my @points;
+
+  while (1) {
+    my ($point, $distance) = _nearest_neighbor($self->{root}, $x, $y, 0);
+    if ($distance < $radius) {
+      push @points, $point;
+      $point->{seen} = 1;
+    } else {
+      last;
+    }
+  }
+
+  for my $point (@points) {  # Unmark
+    $point->{seen} = undef;
+  }
+
+  return @points;
+}
+    
+
 sub find_neighbors {
   my ($self, $x, $y, $start, $end) = @_;
   my @points;

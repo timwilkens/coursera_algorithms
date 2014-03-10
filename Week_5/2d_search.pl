@@ -40,9 +40,19 @@ my $x = int(rand(10000));
 my $y = int(rand(10000));
 
 print "Looking for closest to ($x, $y)\n";
+One();
+print "\n";
 Three();
 print "\n";
 Four();
+print "\n";
+
+my @close = $tree->radius_search($x, $y, 5000);
+for (@close) { 
+  print "(" . $_->x . "," . $_->y . ")\n";
+}
+
+
 
 
 sub One {
