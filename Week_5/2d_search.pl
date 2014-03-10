@@ -30,7 +30,7 @@ use Benchmark;
 
 my @points;
                       
-for (1 .. 100_000) {
+for (1 .. 10) {
   push @points, [int(rand(10000)), int(rand(10000))];
 }
 
@@ -40,11 +40,14 @@ my $x = int(rand(10000));
 my $y = int(rand(10000));
 
 print "Looking for closest to ($x, $y)\n";
+Three();
+print "\n";
+Four();
 
 
 sub One {
   my ($nearest, $distance) = $tree->find_neighbor($x,$y);
-#  print "(" . $nearest->x . "," . $nearest->y . ") : $distance\n";
+  print "(" . $nearest->x . "," . $nearest->y . ") : $distance\n";
 }
 
 sub Two {
@@ -53,16 +56,24 @@ sub Two {
 }
 
 sub Three {
-  my @closest = $tree->find_neighbors($x, $y, 1, 50);
+  my @closest = $tree->find_neighbors($x, $y, 1, 10);
 
-#  for (@closest) {
-#    print "(" . $_->x . "," . $_->y . ")\n";
-#  }
+  for (@closest) {
+    print "(" . $_->x . "," . $_->y . ")\n";
+  }
 }
 
-timethese (
-  10,
-  {'2d-Tree' => '&One',
-   'Brute Force' => '&Two',
-   'Neighbor Rank' => '&Three',}
-);
+sub Four {
+  my @closest = $tree->brute_force_search_rank($x, $y);
+
+  for (@closest) {
+    print "(" . $_->[0]->x . "," . $_->[0]->y . ")\n";
+  }
+}
+
+#timethese (
+#  10,
+#  {'2d-Tree' => '&One',
+#   'Brute Force' => '&Two',
+#   'Neighbor Rank' => '&Three',}
+#);

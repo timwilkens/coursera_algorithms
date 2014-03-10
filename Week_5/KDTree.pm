@@ -128,7 +128,12 @@ sub _nearest_neighbor {
   my ($point, $x, $y, $axis, $best_point, $best_distance) = @_;
   my $current_point_distance = _distance($x, $y, $point->x, $point->y);
 
-  if (!$point->seen && (!$best_point || ($best_distance > $current_point_distance))) {  # First call on root OR current position better than best
+  if (!$best_point && !$point->seen) {  # Set best to root if we haven't seen it
+    $best_point = $point;
+    $best_distance = $current_point_distance;
+  }
+
+  if (!$point->seen && ($best_distance > $current_point_distance)) {  # Set best to current position if closer
     $best_point = $point;
     $best_distance = $current_point_distance;
   }
@@ -157,18 +162,25 @@ sub _nearest_neighbor {
 
   if ($next_child) {
     my ($next_point, $next_distance) = _nearest_neighbor($next_child, $x, $y, (($axis + 1) % 2), $best_point, $best_distance);
-    if (!$next_point->seen) {
+    if ($next_point && !$next_point->seen) {
       $best_point = $next_point;
       $best_distance = $next_distance;
     }
   }
 
-  if ((abs($point_value - $seeking_value) < $best_distance) && $other_child) {  # Closer point could be on the other branch
+  my $other_check;
+
+  if ($best_distance && (abs($point_value - $seeking_value) < $best_distance) && $other_child) {  # Closer point could be on the other branch
+    $other_check = 1;
     my ($contender, $contender_distance) = _nearest_neighbor($other_child, $x, $y, (($axis + 1) % 2), $best_point, $best_distance);
     if (($contender_distance < $best_distance) && !$contender->seen) {
       $best_point = $contender;
       $best_distance = $contender_distance;
     }
+  }
+
+  if (!$other_check && !$best_point && $other_child) { # Force going down the other side if we don't have a best
+    return _nearest_neighbor($other_child, $x, $y, (($axis + 1) % 2), $best_point, $best_distance);
   }
 
   return ($best_point, $best_distance);
@@ -182,19 +194,11 @@ sub _distance {
 
 sub brute_force_search_rank {
   my ($self, $x, $y, $end) = @_;
-  my @points;
+  my $points = _walk_and_store_all($self->{root}, $x, $y);
 
-  for (1 .. $end) {
-    my ($point, $distance) = _walk_and_store($self->{root}, $x, $y);
-    push @points, $point->[0];
-    $point->[0]{seen} = 1;
-  }
+  @$points = sort { $a->[1] <=> $b->[1] } @$points;
 
-  for my $point (@points) {
-    $point->{seen} = undef;
-  }
-
-  return @points;
+  return @$points;
 }
 
 sub brute_force_search {
@@ -218,6 +222,20 @@ sub _walk_and_store {
     $points->[1]= $distance;
   }
   _walk_and_store($point->right, $x, $y, $points);
+ 
+  return $points;
+}
+
+sub _walk_and_store_all {
+  my ($point, $x, $y, $points) = @_;
+
+  if (!$point) { return; }
+  if (!$points) { $points = []; }
+
+  _walk_and_store_all($point->left, $x, $y, $points);
+  my $distance = _distance($x, $y, $point->x, $point->y);
+  push @$points, [$point, $distance];
+  _walk_and_store_all($point->right, $x, $y, $points);
  
   return $points;
 }
