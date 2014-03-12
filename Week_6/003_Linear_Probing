@@ -1,0 +1,40 @@
+Linear Probing
+
+  Another collision solution: Open Addressing
+    - replace linked lists with array
+    - when a new key collides with another one, find the next empty slot and put it there
+
+  Hash => map key to interger i between 0 and M-1
+  Insert => Put at table index i if free; if not try i+1, i+2
+    - use the hash function as an array index
+    - avoid "clustering" by not putting too many keys in the table
+
+  Search => search index table i; if occupied but no match, try i+1, i+2 as long as the array slots are occupied
+
+  Continues to be good as long as the array is large enough (not too full)
+    - array size M must be greater than number of key-value pairs N
+    - rule of thumb - keep it at least half empty
+
+  Cluster - a contiguous block of items
+   - new keys likely to hash into middle of big clusters
+
+  Knuth's parking problem
+    - model - cars arrive at one-way street with M parking spaces.
+      - each desires a random space i: if space i is taken, try i+1, i+2
+
+    What is the mean displacement of a car?
+      - half-full - mean displacement is ~ 3/2
+      - with M cars, mean is ~ sqrt (pi M/8)
+
+  Under uniform hashing assumption, the average # of probes in a linear probing hash table of size
+    M that contains N = alphaM (fraction of M) keys is:
+
+    Search hit: ~ 1/2 * (1 + (1 / (1 - a)))
+
+    Search miss/insert: ~ 1/2 * (1 + (1 / (1 - a)^2))
+      - these formulas are independent of N and M
+
+  M too large => too many empty array entries
+  M too small => search time blows up
+  Typical choice => a = N/M ~ 1/2
+    - use array re-sizing to make sure array is always ~ 1/2 full

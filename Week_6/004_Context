@@ -1,0 +1,78 @@
+Context of hashing in practical applications
+
+  String hashing in Java
+    - hashing on long strings is expensive
+    - only examine 8-9 evenly spaced characters in long strings
+    - benefit: saves time in performing arithmetic
+
+    Hashing is fast when the input is small
+      - can have a LARGE constant factor
+      - red black trees can outperform hashing in some cases
+
+    Some inputs have the potential for producing bad collision patterns (when you look at every 8 characters)
+      - set of urls from the same site
+
+  Problem - uniform hashing assumption is an ASSUMPTION
+    - dangerous to rely on it when you need guaranteed performance
+    - Red black search trees will give us guaranteed performance
+
+  Susceptible to algorithmic complexity attacks
+    - Java and others make their hash functions public
+    - attackers can provide pathological inputs that cause huge pile-ups and even
+      lead to DOS attacks
+      - some attacks have existed in Perl 5.8, Linux kernel...
+
+    Goal: find family of strings with the same hash code
+      - easy to find for strings in Java
+      - result: can find 2^N strings of length 2N that hash to the same value
+
+  Diversion: ony-way hash functions
+    - "hard" to find a key that will hash to a desired value
+    - ex: MD4, MD5, SHA-0, SHA-1, SHA-2, WHIRLPOOL
+    - TOO expensive for use in hash tables
+
+  Separate chaining vs. linear probing
+
+    SC:
+      - easier to implement delete
+      - performance degrades gracefully
+      - clustering less sensitive to pooly-designed hash function
+
+    LP:
+      - less wasted space
+      - better cache performance
+
+  Other improved versions:
+ 
+    Two-probe hashing (separate-chaining variant)
+      - hash to two positions, insert key in shorter of the two chains
+      - reduces expected length of the longest chain log log N
+
+    Double hashing (linear probing variant)
+      - use linear probing, but skip a variable amount, not just 1 each time
+      - effectively eliminates clustering
+      - can allow table to become nearly full
+      - more difficult to implement delete
+
+    Cuckoo hashing (linear probing variant)
+      - hash key to two positions; insert key into either position; if occupied,
+        reinsert displaced key into its alternative position (and recurse if needed)
+      - constant worst case time for search
+
+  Hash tables vs. balanced search trees
+
+    HTs:
+      - simpler to code
+      - no effective alternative for unordered keys
+      - faster for simple keys (a few arithmetic ops vs. log N compares)
+      - better system support in Java for strings (e.g. cached hash code)
+
+    BSTs:
+      - stronger performance guarantee
+      - support for ordered ST operations
+      - easier to implement compareTo() correctly than equals() and hashCode()
+
+  Java system includes both:
+    - red black BSTs - java.util.TreeMap, java.util.TreeSet
+    - hash tables - java.util.HashMap, java.util.IdentityHashMap
+    
